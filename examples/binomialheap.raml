@@ -1,0 +1,32 @@
+(* attempt to code binomial trees in RaML; doesn't work as list of btree's are not supported *)
+
+exception Empty_heap
+exception Decrease_heap
+
+(* general binary trees for raml *)
+type 'a tree = Leaf | Node of 'a * 'a tree * 'a tree
+
+type 'a tree = Leaf | Node of 'a * 'a tree * 'a tree
+type 'a btree = Empty | Tuple of int * 'a * ('a btree) list (* tuple of (rank t, root t, kids t) *)
+type 'a heap = 'a btree list
+
+let rank t = match t with
+     | Leaf -> Empty_heap
+     | Node (r, x, c) -> r
+     
+let isEmpty t = match t with
+     | Leaf -> true
+     | Node (x,l,r) -> false
+
+let link cmp t1 t2 = match t1 with
+	| Empty -> Empty
+    | Tuple (r,x1,c1) -> match t2 with
+    	| Empty -> Empty
+        | Tuple (_,x2,c2) -> if cmp(x1,x2) then Tuple(r+1,x1,t2 :: c1)
+        	else Tuple(r+1, x2, t1 :: c2)
+
+
+;;
+
+()
+

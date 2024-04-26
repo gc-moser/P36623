@@ -1,0 +1,51 @@
+exception Empty_heap
+exception Decrease_heap
+
+(* type 'a mHeap = E | T of 'a * ('a mHeap) * ('a mHeap) *)
+type heap = E | T of int * heap * heap
+
+let make_queue = E
+
+let find_min h = match h with
+  | E -> -1
+  | T (root,h1,h2) -> root
+
+let rec meld h1 h2 = match h1 with
+  | E -> h2 
+  | T (a, l1, r1) -> match h2 with
+    | E -> h1
+    | T (b, l2, r2) -> if a <= b then
+                          if Rprob.flip(1,1) then
+                             let h' = meld l1 h2 in T (a, h', r1)
+                          else let h' = meld r1 h2 in T (a, l1, h')
+		       else if Rprob.flip(1,1) then
+                             let h' = meld l2 h1 in T (b, h', r2)
+                          else let h' = meld r2 h1 in T (b, l2, h')
+			  
+let insert e h = let h' = T (e,E,E) in meld h' h
+
+let delete_min h = match h with
+  | E -> E
+  | T (a, h1, h2) -> meld h1 h2
+
+let rec decrease_key h e e' =
+  if e <= e' then
+     match h with
+       | E -> E
+       | T (x, h1, h2)  -> if x < e then
+                              let h1' = decrease_key h1 e e' in
+			      let h2' = decrease_key h2 e e' in			      
+                              T (x, h1', h2')
+			   else if x=e then T (e', h1, h2)
+			        else E
+  else E
+			        
+let rec from_list ls = match ls with
+  | [] -> E
+  | x::xs -> let h' = from_list xs
+             in insert x h'
+;;
+
+let l = [1;2;3;4] in
+from_list l
+
