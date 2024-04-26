@@ -1,0 +1,70 @@
+\documentclass[10pt,a4paper]{article}
+% \documentclass[a4paper,
+% 10pt,
+% DIV 10]{scrartcl}
+
+\usepackage[utf8x]{inputenc}
+\usepackage[english]{babel}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{amsmath}
+\usepackage{url}
+\usepackage{graphicx}
+\usepackage{watermark}
+\usepackage{xspace}
+\usepackage{paralist}
+\usepackage{xargs}
+\usepackage{research}
+
+\addtolength{\textheight}{-2cm}
+\addtolength{\textwidth}{2cm}
+\addtolength{\textheight}{4cm}
+\addtolength{\oddsidemargin}{-12mm}
+
+\pagestyle{empty}
+
+\begin{document}
+\watermark{\put(-95,-760){\includegraphics{template.pdf}}}
+
+\vspace*{23mm}
+\noindent\hspace{35ex}
+2024
+
+\vspace*{10mm}
+
+\begin{center}
+\large \normalsize Progress Report AUTOSARD 
+\end{center}
+
+In AUTOSARD, we target an automated analysis of the most common data structures with good, ie. sublinear, complexity, such as balanced trees, Fibonacci heaps, randomised search trees, skip lists, skew heaps, Union-find, etc. Our goals are the verification of textbook data structures, the confirmation and improvement (on coefficients) of previously reported complexity bounds, as well as the automated analysis of realistic data structure implementations.
+
+In our initial phase we have started the study and formalisation of sophisticated data structures, like
+%
+\begin{inparaenum}[(i)]
+\item \emph{binomial heaps};
+\item \emph{Fibonacci heaps};
+\item \emph{rank-balanced trees};
+\item \emph{zip trees},
+\end{inparaenum}
+%
+putting in particular emphasis on the correctness and completeness of existing compexity analyses of routine functions
+like inseration, deletion, etc. Here we are foremostly interested in amortised complexity analysis that exist for all mentioned
+data structures.
+
+With respect to binomial and Fibonacci heaps, as well as rank-balanced trees our efforts resulted in (almost) completed master theses by
+Hochrainer~\cite{Hochrainer:2024} and Geser~\cite{Geser:2024}, respectively. In these theses, standard data structure operations in
+the corresponding data structures have been formalised in Liquid Haskell, an interactive theorem prover, build on top of the functional
+language \Haskell. These gives us complete understanding of the intracties of the various complexity analysis, providing the necessary
+ground work for later full automation. Similarly, we have studied zip trees in detail.
+
+We plan a joint publication presenting the results of Geser and Hochrainer. Further, we are working on a journal version for pilot
+studies~\cite{LMZ:2021,LMZ:2022} of AUTOSARD, providing a streamlined account of our work on \atlas.
+%
+For further publication within the project, see~\cite{AvanziniMS23,ParsertP24}.
+
+\bibliographystyle{plain}
+\selectlanguage{english}
+\small
+\bibliography{references}
+
+\end{document}

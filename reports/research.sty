@@ -1,0 +1,194 @@
+% style file for proposal
+
+%from CAV paper
+\newcommand*{\potential}[2]{\Phi({#1} {\mid} {#2})}
+\newcommand*{\Tree}{\m{T}}
+\DeclareMathOperator{\rk}{\m{rk}}
+\newcommand*{\trule}[1]{\ensuremath{(\m{{#1}})}}
+\newcommand*{\rulematch}{\trule{match}}
+\newcommand*{\TreeShort}{\m{T}}
+\newcommand{\flst}[1]{\text{\small\color{darkviolet}\texttt{{#1}}}}
+\newcommand{\flstk}[1]{\text{\small\color{keyword}\texttt{{#1}}}}
+\newcommand{\flstc}[1]{\text{\small\color{constructor}\texttt{{#1}}}}
+%\newcommand{\flsttree}[3]{\text{\small\color{constructor}\texttt{Node(}}{#1}\text{\small\color{darkviolet}\texttt{,}}{#2}\text{\small\color{darkviolet}\texttt{,}}{#3}\text{\small\color{constructor}\texttt{)}}}
+\newcommand{\flsttree}[3]{\text{\small\color{constructor}\texttt{node(}}{#1}\text{\small\color{darkviolet}\texttt{,}}{#2}\text{\small\color{darkviolet}\texttt{,}}{#3}\text{\small\color{constructor}\texttt{)}}}
+\newcommand*{\tjudgerule}[5]{{#1} {\mid} {#2} \vdash \typed{#3}{#4} {\mid} {#5}}
+
+
+% misc
+\newcommand*{\tpkt}{\rlap{$\;$.}}
+\newcommand*{\tkom}{\rlap{$\;$,}}
+\newcommand{\defsym}{\mathrel{:=}}
+\newcommand{\defeqv}{\mathrel{:\Longleftrightarrow}}
+\newcommand*{\m}[1]{\mathsf{#1}}
+\newcommand{\bskip}{\vspace{-\baselineskip}}
+
+% generic definitions
+\DeclareMathOperator{\dom}{\m{dom}}
+\DeclareMathOperator{\range}{\m{rg}}
+\newcommand*{\N}{{\mathbb{N}}}
+\newcommand*{\R}{{\mathbb{R}}}
+\newcommand*{\Q}{{\mathbb{Q}}}
+\newcommand*{\Qplus}{{\mathbb{Q}^+}}
+\newcommand*{\Z}{{\mathbb{Z}}}
+\newcommand*{\bO}{\m{O}}
+\newcommand*{\rst}[2]{{#1}\!\restriction\!{#2}}
+\newcommand*{\dunion}{\mathrel{\uplus}}
+\DeclareMathOperator{\pow}{\mathcal{P}}
+\newcommand*{\stack}[2]{\genfrac{}{}{0pt}{3}{#1}{#2}}
+\newcommand*{\len}[1]{\lvert #1 \rvert}
+\newcommandx*\seq[5][1=1, 3=n, 4={,}, 5=\dots]{#2_{#1}#4#5#4#2_{#3}}
+\newcommandx*\seqx[5][1=1, 3=n, 4={,}, 5=\dots]{{\renewcommand{\i}{#1}#2}#4#5#4{\renewcommand{\i}{#3}#2}}
+
+% annotations
+\newcommand*{\TDannot}{\FS_{\m{pol}}}
+\newcommand{\Vecs}{\mathcal{A}}
+\newcommand*{\atypdcl}[3]{[{#1}] \xrightarrow{#3} {#2}}
+\newcommand*{\tjudge}[3]{{#1} \sststile{}{#2} {#3}}
+\newcommand*{\footprint}[3]{{#1} \sststile{\m{fp}}{#2} {#3}}
+%\newcommand*{\typed}[2]{{#1}{:}\,{#2}}
+\newcommand*{\typed}[2]{{#1}{\colon}\!{#2}}
+\newcommand*{\share}[2]{\curlyvee\!({#1}\! \mid \! {#2})}
+\newcommand*{\pp}{\vec{p}}
+\newcommand*{\ppcf}{\vec{p}^{\hspace{0.8mm} cf}}
+\newcommand*{\kcf}{\vec{k}^{cf}}
+\newcommand*{\qq}{\vec{q}}
+\newcommand*{\qqcf}{\vec{q}^{\hspace{0.8mm} cf}}
+\newcommand*{\rulecost}{K^{\text{rule}}}
+\newcommand*{\rr}{\vec{r}}
+\newcommand*{\vecs}{\vec{s}}
+
+% examples
+\newcommand*{\nil}{\m{nil}}
+\newcommand*{\cons}{\mathrel{\m{\sharp}}}
+\newcommand*{\mS}{\m{s}}
+\newcommand*{\zero}{\m{0}}
+\newcommand*{\conv}{\m{conv}}
+\newcommand*{\half}{\m{half}}
+\newcommand*{\lastbit}{\m{lastbit}}
+\newcommand*{\RSa}{\RS_{1}}
+
+% introduction
+\newcommand*{\Program}{\textsf{P}}
+\newcommand*{\Source}{\textsf{S}}
+\newcommand*{\Target}{\textsf{T}}
+\newcommand*{\allocs}{\textsf{Allocs}}
+\newcommand*{\aprove}{\textsf{AProVE}}
+\newcommand*{\koat}{\textsf{KoAT}}
+\newcommand*{\costa}{\textsf{COSTA}}
+\newcommand*{\ciaopp}{\textsf{CiaoPP}}
+\newcommand*{\cofloco}{\textsf{CoFloCo}}
+\newcommand*{\loopus}{\textsf{LOOPUS}}
+\newcommand*{\pubs}{\textsf{PUBS}}
+\newcommand*{\raml}{\textsf{RaML}}
+\newcommand*{\speed}{\textsf{SPEED}}
+\newcommand*{\saco}{\textsf{SACO}}
+\newcommand*{\raja}{\textsf{RAJA}}
+\newcommand*{\tct}{\textsf{T\kern-0.2em\raisebox{-0.3em}C\kern-0.2emT}}
+\newcommand*{\TTTT}{%
+ \textsf{T\kern-0.15em\raisebox{-0.55ex}T\kern-0.15emT\kern-0.15em\raisebox{-0.55ex}2}%
+}
+\newcommand*{\C}{\textsf{C}}
+\newcommand*{\JavaBytecode}{\texttt{JBC}}
+\newcommand*{\Java}{\textsf{Java}}
+\newcommand*{\hoca}{\texttt{HoCA}}
+\newcommand*{\hosa}{\texttt{HoSA}}
+\newcommand*{\jbc}{\texttt{JBC}}
+\newcommand*{\Ocaml}{\texttt{OCaml}}
+\newcommand*{\OCaml}{\texttt{OCaml}}
+\newcommand*{\Erlang}{\texttt{Erlang}}
+\newcommand*{\OTP}{\texttt{OTP}}
+\newcommand*{\CoreHaskell}{\texttt{Core IL}}
+\newcommand*{\Haskell}{\texttt{Haskell}}
+\newcommand*{\Prolog}{\texttt{Prolog}}
+\newcommand*{\ML}{\textsf{ML}}
+\newcommand*{\isabelle}{\textsf{Isabelle}/\textsf{HOL}}
+\newcommand*{\Wrangler}{\textsf{Wrangler}}
+\newcommand*{\Percept}{\textsf{Percept}}
+\newcommand*{\Rotor}{\textsf{Rotor}}
+\newcommand*{\Skel}{\textsf{Skel}}
+\newcommand*{\atlas}{\textsf{ATLAS}}
+\newcommand*{\Absynth}{\textsf{Absynth}}
+\newcommand*\ecoimp{\textsf{eco-imp}}
+\newcommand*{\TheProject}{AUTOSARD}
+
+% WPs
+
+\newcommand*{\WP}{\textbf{WP}}
+\newcommand*{\WPs}{\textbf{WPs}}
+
+\newcommand*{\GoalA}{\textbf{A}}
+\renewcommand*{\AA}{\textbf{A(1)}}
+\newcommand*{\AB}{\textbf{A(2)}}
+\newcommand*{\AC}{\textbf{A(3)}}
+\newcommand*{\AD}{\textbf{A(4)}}
+\renewcommand*{\AE}{\textbf{A(5)}}
+
+\newcommand*{\GoalB}{\textbf{B}}
+\newcommand*{\BA}{\textbf{B(1)}}
+\newcommand*{\BB}{\textbf{B(2)}}
+\newcommand*{\BC}{\textbf{B(3)}}
+\newcommand*{\BD}{\textbf{B(4)}}
+\newcommand*{\BE}{\textbf{B(5)}}
+
+\newcommand*{\GoalC}{\textbf{C}}
+\newcommand*{\CA}{\textbf{C(1)}}
+\newcommand*{\CB}{\textbf{C(2)}}
+\newcommand*{\CC}{\textbf{C(3)}}
+\newcommand*{\CD}{\textbf{C(4)}}
+\newcommand*{\CE}{\textbf{C(5)}}
+
+\newcommand*{\GoalD}{\textbf{D}}
+\newcommand*{\DA}{\textbf{D(1)}}
+\newcommand*{\DB}{\textbf{D(2)}}
+\newcommand*{\DC}{\textbf{D(3)}}
+\newcommand*{\DD}{\textbf{D(4)}}
+
+% open problems
+
+\newcommand*{\matrixvar}[1]{\mathrm{#1}}
+\newcommand*{\vectorvar}[1]{\mathbf{#1}}
+\newcommand*{\entryvar}[1]{#1}
+\newcommand*{\variable}[1]{#1}
+\newcommand*{\constant}[1]{\mathrm{#1}}
+\newcommand*{\mathkeyword}[1]{\mathbf{\mathtt{#1}}}
+\newcommand*{\mkeyword}{\mathkeyword}
+\newcommand*{\mxv}{\matrixvar}
+\newcommand*{\vcv}{\vectorvar}
+\newcommand*{\vv}{\variable}
+\newcommand*{\cv}{\constant}
+
+% benchmarks
+\newcommand*{\splay}{\lstinline[style=splay]{splay}}
+\newcommand*{\descend}{\lstinline{descend}}
+\newcommandx*\tick[3][1=1, 2=1]{{#3}^{\color{extension}\checkmark \ifstrequal{#1#2}{11}{}{\flstp{\tiny#1/#2}}}}
+\newcommand*{\size}[1]{\lvert {#1} \rvert}
+
+%\newcommand*{\tree}[3]{\textup{\lstinline[style=splay]{Node({#1},{#2},{#3})}}}
+%\newcommand*{\treelit}[3]{\lstinline[style=splay]{Node({#1},{#2},{#3})}}
+\newcommand*{\tree}[3]{\textup{\lstinline{node} {\ensuremath{#1}} {\ensuremath{#2}} {\ensuremath{#3}}}}
+% \newcommand*{\leaf}{\textup{\lstinline[style=splay]{leaf}}}
+%\newcommand*{\leaf}{\textup{\lstinline[style=splay]{Empty}}}
+\newcommand*{\leaf}{\textup{\lstinline{leaf}}}
+
+
+\newcommand*{\true}{\textup{\lstinline{true}}}
+\newcommand*{\false}{\textup{\lstinline{false}}}
+\newcommand*{\cif}{\textup{\lstinline{if}}}
+\newcommand*{\cthen}{\textup{\lstinline{then}}}
+\newcommand*{\celse}{\textup{\lstinline{else}}}
+\newcommand*{\vlet}{\textup{\lstinline{let}}}
+\newcommand*{\equal}{\textup{\lstinline{=}}}
+\newcommand*{\vin}{\textup{\lstinline{in}}}
+\newcommand*{\match}{\textup{\lstinline{match}}}
+\newcommand*{\with}{\textup{\lstinline{with}}}
+\newcommand*{\arrow}{\mathrel{\textup{\lstinline{->}}}}
+\newcommand*{\eval}[4]{{#1} \sststile{}{#2} {{#3} \Rightarrow {#4}}}
+
+% probabilistic programs
+\newcommand*{\ert}{\ensuremath{\m{ert}}}
+\newcommand*{\ect}{\ensuremath{\m{ect}}}
+\newcommand*{\ecost}[1]{\ensuremath{\m{ecost}(#1)}}
+\newcommand*{\evalue}[1]{\ensuremath{\m{evalue}(#1)}}
+
+    
