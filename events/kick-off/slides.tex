@@ -3,7 +3,7 @@
 usepdftitle=false,
 aspectratio=169,
 xcolor={table,usenames,dvipsnames},
-handout,
+%handout,
 ]{beamer}
 
 \usetheme[nototalframenumber,nosectiontitlepage,foot,logo,url]{uibk}
@@ -117,9 +117,10 @@ handout,
   boxrule=.2mm
 }
 
-\title{Automated Sublinear Amortised Resource Analysis of Data Structures (AUTOSARD)}
+\title{Automated Sublinear Amortised Resource Analysis of\\[1ex]
+  Data Structures (AUTOSARD)}
 
-\author[GM]{\textbf{Georg Moser} \and Florian Zuleger}
+\author[GM]{Georg Moser \and Florian Zuleger}
 
 \date{June 8, 2023}
 \headerimage{4}
@@ -155,35 +156,46 @@ handout,
 
   \begin{mybox}{Objectives}
     \begin{enumerate}
-    \item \textbf{Sublinear Amortised Cost Analysis}
-      
-      Amortised data structures--often taken up for their efficiency in practice--typically feature \emph{sublinear} amortised costs.
-      We want to extend our pilot project to derive such bounds in a principled and fully automated fashion.
-      Our pilot project employed only the ``sum of logarithms'' potential function.
-      We want to build a library of potential functions that can be used for the automated analysis of the most common data structures.
-      These potential functions will need to be accompanied by suitable techniques for reasoning about their non-linear behaviour (as was needed for reasoning about the logarithms).
+    \item[\textbf{A}]<1-> \textbf{Sublinear Amortised Cost Analysis}
+      \begin{itemize}
+      \item amortised data structures typically feature \alert{sublinear} amortised costs
+      \item we want to derive such bounds in a principled and fully automated fashion
+      \item we want to build a library of potential functions that can be used for the automated analysis of the most common data structures
+      \end{itemize}
+      % Amortised data structures--often taken up for their efficiency in practice--typically feature \emph{sublinear} amortised costs.
+      % We want to extend our pilot project to derive such bounds in a principled and fully automated fashion.
+      % Our pilot project employed only the ``sum of logarithms'' potential function.
+      % We want to build a library of potential functions that can be used for the automated analysis of the most common data structures.
+      % These potential functions will need to be accompanied by suitable techniques for reasoning about their non-linear behaviour (as was needed for reasoning about the logarithms).
 
       \smallskip
       
-    \item \textbf{Amortised Cost Analysis for Lazy Evaluation}
-
-      Resource analysis of non-strict programming languages has been notoriously difficult.
-      However, lazy evaluation offers distinct advantages for the design of \emph{persistent} data structures with good amortised computational complexity as argued by Okasaki~\cite{Okasaki:1999}.
-      In~AUTOSARD, we will adapt the techniques from our pilot project to lazy evaluation.
-      % 
-      % The advantages of amortised data structures immediately breaks if one applies them \emph{persistently}, which, however can be overcome if used in the context of \emph{lazy evaluation}.
-      % 
-      This will require to adapt the notion of amortised analysis to \emph{debits} instead of \emph{credits} as proposed by Okasaki~\cite{Okasaki:1999}.
+    \item[\textbf{B}]<2-> \textbf{Amortised Cost Analysis for Lazy Evaluation}
+      \begin{itemize}
+      \item lazy evaluation offers distinct advantages for the design of \alert{persistent} data structures with good amortised computational complexity
+      \item we will adapt the techniques from our pilot project to lazy evaluation
+      \item this will require to adapt the notion of amortised analysis to \alert{debits} instead of \alert{credits}
+      \end{itemize}
+      % Resource analysis of non-strict programming languages has been notoriously difficult.
+      % However, lazy evaluation offers distinct advantages for the design of \emph{persistent} data structures with good amortised computational complexity as argued by Okasaki~\cite{Okasaki:1999}.
+      % In~AUTOSARD, we will adapt the techniques from our pilot project to lazy evaluation.
+      % % 
+      % % The advantages of amortised data structures immediately breaks if one applies them \emph{persistently}, which, however can be overcome if used in the context of \emph{lazy evaluation}.
+      % % 
+      % This will require to adapt the notion of amortised analysis to \emph{debits} instead of \emph{credits} as proposed by Okasaki~\cite{Okasaki:1999}.
       
       \smallskip
-    \item \textbf{Expected Cost Analysis for Probabilistic Data Structures}
-
-      Probabilistic algorithms have been studied since the advent of theoretical computer science.
-Not surprisingly the performance
-gains in the use of probabilistic data structures have been noted early on.
-Motivated by our recent success in the analysis of the expected amortised
-costs of \emph{meldable heaps}, \emph{randomised splay trees} and \emph{randomised splay heaps} in our pilot project,
-we will extend our analysis to further probabilistic data structures.
+    \item[\textbf{C}]<3-> \textbf{Expected Cost Analysis for Probabilistic Data Structures}
+      \begin{itemize}
+      \item the performance gains in the use of probabilistic data structures are well known
+      \item we will extend our analyses to further probabilistic data structures
+      \end{itemize}
+ %      Probabilistic algorithms have been studied since the advent of theoretical computer science.
+% Not surprisingly the performance
+% gains in the use of probabilistic data structures have been noted early on.
+% Motivated by our recent success in the analysis of the expected amortised
+% costs of \emph{meldable heaps}, \emph{randomised splay trees} and \emph{randomised splay heaps} in our pilot project,
+% we will extend our analysis to further probabilistic data structures.
 
     \end{enumerate}
   \end{mybox}
@@ -191,35 +203,88 @@ we will extend our analysis to further probabilistic data structures.
 
 \begin{frame}
   \frametitle{Sublinear Amortised Cost Analysis}
+  \vspace{-1ex}
+  \begin{itemize}
+  \item we want to build a library of potential functions that can be used for the automated analysis of the most common data structures
+  \end{itemize}
 
+  \medskip
+  \onslide<2->
+  
   \ueb{Milestones}
+  \begin{itemize}
+  \item we consider to confirm the analysis of \BLUE{pairing heaps} due to Iacono, which requires the combination of several potential functions
+  \item we will consider \BLUE{skew heaps} and \BLUE{Fibonacci heaps}, \BLUE{union-find data structures}
+  \item parts of standard OCaml libraries, like the \texttt{set.ml} library
+  \item as well as challenging examples considered in the literature
+  \end{itemize}
 
-  As milestone, we consider to confirm the analysis of
-\emph{pairing heaps}~\cite{Okasaki:1999} (see Figure~\ref{fig:2}) due to Iacono~\cite{conf/swat/Iacono00,conf/cocoa/IaconoY16}, which requires the combination of several potential functions.
-%
-For further case studies, we will consider \emph{skew heaps} and \emph{Fibonacci heaps}~\cite{Okasaki:1999}, \emph{union-find data structures}~\cite{journals/jar/ChargueraudP19},
-parts of standard OCaml\ libraries,
-like the \texttt{set.ml} library, as well as challenging examples considered in the literature, cf.~\cite{Okasaki:1999,ADM:2015,HDW:2017}.
-
+  \medskip
+  \onslide<3->
+  
+  \ueb{Work in progess}
+  \begin{itemize}
+  \item we've studied formal amortised cost analyses of \alert{rank-balanced trees}, \alert{binomial heaps}
+    in Liquid Haskell; Jamie will later report (I hope) on a formalisation of \alert{Fibonacci heaps}
+  \item \atlas\ has been re-implemented, extending the library of potential functions partly (see Armin's talk)
+  \end{itemize}
 \end{frame}
 
 \begin{frame}
   \frametitle{Amortised Cost Analysis for Lazy Evaluation}
+   \vspace{-1ex}
+  \begin{itemize}
+  \item we will adapt the techniques from our pilot project to lazy evaluation
+  \end{itemize}
 
+  \medskip
+  \onslide<2->
+  
   \ueb{Milestones}
+  \begin{itemize}
+  \item we consider the analysis of \BLUE{lazy skew heaps}
+  \item we will further consider (parts of) standard Haskell libraries like
+    eg.\ Haskell's \texttt{containers} library
+  \item as well as challenging examples considered in the literatur
+  \end{itemize}
 
-  As milestone, we consider the analysis of \emph{lazy skew heaps}~\cite{Okasaki04} (see Figure~\ref{fig:3}).
-For validation, we will further consider (parts of) standard Haskell\ libraries like eg.\ Haskell's \texttt{containers} library, as well as challenging examples considered in the literature, cf.~\cite{Okasaki:1999,Okasaki04,JVFH:2017,MadhavanKK17,HVH:2020}.
+  \medskip
+  \onslide<3->
+  
+  \ueb{Work in progess}
+  \begin{itemize}
+  \item none \smiley
+  \end{itemize}
+
 \end{frame}
 
 \begin{frame}
   \frametitle{Expected Cost Analysis for Probabilistic Data Structures}
+  \vspace{-1ex}
+  \begin{itemize}
+  \item we will extend our analyses to further probabilistic data structures
+  \end{itemize}
 
+  \medskip
+  \onslide<2->
+  
   \ueb{Milestones}
-  As milestone, we consider the analysis of \emph{random search trees}~\cite{MartinezR98} (see Figure~\ref{fig:4}), which will require the support of non-constant probabilities.
-%
-Further interesting case studies include \emph{skip lists}~\cite{Pugh90}, \emph{randomised treaps}~\cite{EberlHN20}, as well as challenging examples considered in the literature,
-like the \emph{Coupon Collector problem}~\cite{MitzenMacherU05,KKMO:ACM:18,AMS:2020,ABD:2021} or \emph{randomised quicksort}~\cite{MR:1999,AvanziniLG19}.
+  \begin{itemize}
+  \item we consider the analysis of \BLUE{random search trees}, which will require the support of non-constant probabilities
+  \item Further interesting case studies include \BLUE{skip lists}, \BLUE{randomised treaps}, as well as
+    \BLUE{Coupon Collector problem} or \BLUE{randomised quicksort}
+  \end{itemize}
+
+  \medskip
+  \onslide<3->
+  
+  \ueb{Work in progess}
+  \begin{itemize}
+  \item Matthias will present recent work on the formalisation of \alert{randomised meldable heaps}
+  \item we have been working on a new (amortised) complexity proof (that should be easier to automate)
+    of \alert{zip trees} (an improvement on skip lists)
+  \item<4-> ongoing research suggests that a fully automated analysis of \BLUE{Coupon Collector problem} or \BLUE{randomised quicksort} may belong to SF or even fantasy \dots
+  \end{itemize}
 \end{frame}
 
 \section{Pilot Study: Splay Trees}
@@ -404,8 +469,6 @@ subtree/.style = {isosceles triangle, draw=black, dotted, shape border rotate=90
 \end{center}
 \end{frame}
 
-\section{Results}
-
 \begin{frame}
 \frametitle{Improvements over existing pen-and-paper proofs}
 \vspace{-.7cm}  
@@ -512,6 +575,7 @@ subtree/.style = {isosceles triangle, draw=black, dotted, shape border rotate=90
 \callout<3>[callout=blue!5]{c}{90}{2mm}{\footnotesize Nipkow et al.}
 \onslide<4->
 \end{frame}
+
 
 \section{Methodology}
 
@@ -787,34 +851,6 @@ Then, we have $\spotential{\Gamma}{Q} \geqslant c + \Expect{\mu}{\lambda v. \pot
 
 \end{frame}
 
-\section{Project Results and Ongoing Work}
-
-\begin{frame}
-  \frametitle{Sublinear Amortised Cost Analysis}
-
-  \begin{itemize}
-  \item rank-balanced search trees
-  \item Binomial and Fibonacci heaps
-  \end{itemize}
-\end{frame}
-
-\begin{frame}
-  \frametitle{Expected Cost Analysis for Probabilistic Data Structures}
-
-  \begin{itemize}
-  \item randomised melding heaps
-  \item zip trees
-  \end{itemize}
-\end{frame}
-
-
-\section{Thank You for Your Attention!}
-
-% \bibliographystyle{plain}
-% \bibliography{slides}
-\end{document}
-
-\section{Conclusions et al.}
 \begin{frame}
   \frametitle{Conclusions}
   
@@ -833,7 +869,7 @@ Then, we have $\spotential{\Gamma}{Q} \geqslant c + \Expect{\mu}{\lambda v. \pot
   \frametitle{Summary%
     \footnote{This work is dedicated to Martin Hofmann, whose tragic accident happened before we could finalise the results.}
   }
-
+  \vspace{-1ex}
   Automated amortised analysis achieved by:
   \begin{itemize}
   \item user fixes template potential functions.
@@ -846,10 +882,18 @@ Then, we have $\spotential{\Gamma}{Q} \geqslant c + \Expect{\mu}{\lambda v. \pot
   \begin{mybox}{Vision}
     New method for data structure analysis. Extend to further types of data structures (for which different potential functions are needed).
   \end{mybox}
+
+  \medskip
+  \onslide<2->
+
+  \ueb{Remark}
+  \begin{itemize}
+  \item this vision seems to have gained traction (see Lorenz's talk)
+  \end{itemize}
 \end{frame}  
 
 \begin{frame}
-\frametitle{Ongoing and Future Work}
+\frametitle{Observations}
 \vspace{-1mm}
 \begin{mybox}{A}
   data structures are typically formulated based on \textbf{invariants}
@@ -876,4 +920,12 @@ Then, we have $\spotential{\Gamma}{Q} \geqslant c + \Expect{\mu}{\lambda v. \pot
 \end{mybox}
 
 \end{frame}  
+
+\section{Thank You for Your Attention!}
+
+% \bibliographystyle{plain}
+% \bibliography{slides}
+\end{document}
+
+
 
