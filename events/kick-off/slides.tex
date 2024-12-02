@@ -1,0 +1,879 @@
+\documentclass[
+11pt,
+usepdftitle=false,
+aspectratio=169,
+xcolor={table,usenames,dvipsnames},
+handout,
+]{beamer}
+
+\usetheme[nototalframenumber,nosectiontitlepage,foot,logo,url]{uibk}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath,amssymb,alltt}
+\usepackage{xcolor}
+\usepackage[english]{babel}
+\usepackage{stmaryrd}
+\usepackage{wasysym}
+\usepackage{pifont}
+\RequirePackage{etex}
+\usepackage{tikz}
+\usetikzlibrary{backgrounds}
+\usetikzlibrary{fit}
+\usetikzlibrary{matrix}
+\usetikzlibrary{shapes.symbols}
+\usetikzlibrary{shapes.callouts}
+\usetikzlibrary{shapes.geometric}
+\usetikzlibrary{arrows}
+\usetikzlibrary{trees}
+\usetikzlibrary{shadows}
+\usetikzlibrary{automata}
+\usetikzlibrary{decorations.pathmorphing}
+\usetikzlibrary{decorations.pathreplacing}
+\usetikzlibrary{calc}
+\usetikzlibrary{fadings}
+\usetikzlibrary{positioning}
+\usepackage{mathpartir}
+\usepackage{graphicx}
+\usepackage{proof}
+% \usepackage{bussproofs}
+% \usepackage{boxproof}
+\usepackage{xargs}
+\usepackage{paralist}
+\usepackage{multirow}
+\usepackage{listings}
+\usepackage{turnstile}
+\usepackage{xfrac}
+\usepackage[most]{tcolorbox}
+\usepackage{arydshln}
+\usepackage{slides}
+\usepackage{code}
+
+\setbeamertemplate{sidebar right}{}
+\setbeamertemplate{sections/subsections in toc}[ball unnumbered]
+\setbeamersize{text margin left=5mm,text margin right=5mm}
+\setbeamertemplate{itemize items}[circle]
+\setbeamertemplate{enumerate items}[square]
+\setbeamertemplate{qed symbol}{\vrule width 1.5ex height 1.5ex depth 0pt}
+
+\newcommand{\DARKGREEN}[1]{{\color{green!30!black}#1}}
+\newcommand{\BLACK}[1]{{\color{black}#1}}
+\newcommand{\RED}[1]{{\alert{#1}}}
+\newcommand{\DARKRED}[1]{{\color{red!50!black}#1}}
+\newcommand{\DARKBLUE}[1]{{\color{blue!50!black}#1}}
+\newcommand{\BLUE}[1]{{\color{blue}#1}}
+\newcommand{\MAGENTA}[1]{{\color{magenta}#1}}
+\newcommand{\YELLOW}[1]{{\color{yellow}#1}}
+\newcommand{\WHITE}[1]{{\color{white}#1}}
+\definecolor{darkgray}{rgb}{0.31,0.31,0.33}
+\newcommand{\GRAY}[1]{{\color{darkgray}#1}}
+\definecolor[named]{darkviolet}{HTML}{1b0160}
+\definecolor[named]{keyword}{HTML}{e0004a} %TODO: make c/b friendlier
+%\definecolor[named]{keyword}{rgb}{0.99,0.78,0.07}
+\definecolor[named]{constructor}{HTML}{009304}
+\definecolor[named]{warmYellow}{rgb}{0.99,0.78,0.07}
+\definecolor[named]{extension}{HTML}{1e88e5}% coin, tick ("probabilistic extension"), nondeterminism
+\definecolor[named]{basic}{HTML}{1b0160}
+
+\newcommand{\red}[1]{{\color{orange} #1}} % colorblind friendly
+\newcommand{\blue}[1]{{\color{blue!80} #1}}
+\newcommand{\green}[1]{{\color{ForestGreen} #1}}
+
+\newcommand*{\yellowemph}[1]{%
+\tikz[baseline=(X.base)] \node[rectangle, fill=yellow, fill opacity=0.3, text opacity=1, inner sep=1mm, rounded corners] (X) {#1};%
+}
+
+\newcommand*{\boxemph}[1]{%
+\tikz[baseline=(X.base)] \node[rectangle, draw, text opacity=1, inner sep=1mm, rounded corners] (X) {#1};%
+}
+
+% color scheme for TikZ drawings
+%\input{colorscheme}
+
+\newenvironment{mybox}[1]{\begin{block}{#1}}{\end{block}}
+\newenvironment{tctsays}{\begin{mybox}{\large \tct\ says}}{\end{mybox}}
+\newenvironment{question}[1]{\begin{block}{\MAGENTA{Question~{#1}}}}{\end{block}}
+\newenvironment{answer}{\begin{block}{\MAGENTA{Answer}}}{\end{block}}
+
+%GM changes to beamerthemeuibk.sty
+\setbeamercolor*{alerted text}{fg=red}
+
+% Listings Configuration
+\lstset{%
+  language=splay,%
+  numbers=left,%
+  numberstyle=\tiny\color{black},%
+  numbersep=10pt,%
+  backgroundcolor=\color{white},%
+  frame=single,%
+  rulecolor=\color{green!30!black},%
+  framerule=0.75pt,%
+}
+
+% tcolorbox
+\tcbset{colback=white,
+  colframe=darkviolet,
+  highlight math style= {enhanced, %<-- needed for the ’remember’ options
+    colframe=red,colback=red!10!white,boxsep=0pt},
+  arc=0mm,
+  boxrule=.2mm
+}
+
+\title{Automated Sublinear Amortised Resource Analysis of Data Structures (AUTOSARD)}
+
+\author[GM]{\textbf{Georg Moser} \and Florian Zuleger}
+
+\date{June 8, 2023}
+\headerimage{4}
+\footertext{Kick-Off Workshop, }
+
+\begin{document}
+%Z% start every section with a simple frame containing \insertsection
+\AtBeginSection[]{%
+  \begin{frame}[plain]
+    \begin{center}
+      %\usebeamercolor[fg]{structure}
+      % \huge\bfseries\insertsection
+      \title\insertsection
+      \URL{}
+      \maketitle
+      % workaround for repeated use of title slides
+\tikz[remember picture,overlay,anchor=north west,inner sep=0pt]{%
+\node[xshift=0mm,yshift=0mm] at (current page.north west) {\includegraphics[width=42.1mm]{\mylogoimage}};}
+    \end{center}
+  \end{frame}
+}
+
+%Z% also manually generate title page on a plain frame (w/o footer)
+\begin{frame}[plain]
+  \titlepage
+\end{frame}
+
+\author{}
+\subtitle{}
+
+\section{Goals of the Project}
+\begin{frame}
+
+  \begin{mybox}{Objectives}
+    \begin{enumerate}
+    \item \textbf{Sublinear Amortised Cost Analysis}
+      
+      Amortised data structures--often taken up for their efficiency in practice--typically feature \emph{sublinear} amortised costs.
+      We want to extend our pilot project to derive such bounds in a principled and fully automated fashion.
+      Our pilot project employed only the ``sum of logarithms'' potential function.
+      We want to build a library of potential functions that can be used for the automated analysis of the most common data structures.
+      These potential functions will need to be accompanied by suitable techniques for reasoning about their non-linear behaviour (as was needed for reasoning about the logarithms).
+
+      \smallskip
+      
+    \item \textbf{Amortised Cost Analysis for Lazy Evaluation}
+
+      Resource analysis of non-strict programming languages has been notoriously difficult.
+      However, lazy evaluation offers distinct advantages for the design of \emph{persistent} data structures with good amortised computational complexity as argued by Okasaki~\cite{Okasaki:1999}.
+      In~AUTOSARD, we will adapt the techniques from our pilot project to lazy evaluation.
+      % 
+      % The advantages of amortised data structures immediately breaks if one applies them \emph{persistently}, which, however can be overcome if used in the context of \emph{lazy evaluation}.
+      % 
+      This will require to adapt the notion of amortised analysis to \emph{debits} instead of \emph{credits} as proposed by Okasaki~\cite{Okasaki:1999}.
+      
+      \smallskip
+    \item \textbf{Expected Cost Analysis for Probabilistic Data Structures}
+
+      Probabilistic algorithms have been studied since the advent of theoretical computer science.
+Not surprisingly the performance
+gains in the use of probabilistic data structures have been noted early on.
+Motivated by our recent success in the analysis of the expected amortised
+costs of \emph{meldable heaps}, \emph{randomised splay trees} and \emph{randomised splay heaps} in our pilot project,
+we will extend our analysis to further probabilistic data structures.
+
+    \end{enumerate}
+  \end{mybox}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Sublinear Amortised Cost Analysis}
+
+  \ueb{Milestones}
+
+  As milestone, we consider to confirm the analysis of
+\emph{pairing heaps}~\cite{Okasaki:1999} (see Figure~\ref{fig:2}) due to Iacono~\cite{conf/swat/Iacono00,conf/cocoa/IaconoY16}, which requires the combination of several potential functions.
+%
+For further case studies, we will consider \emph{skew heaps} and \emph{Fibonacci heaps}~\cite{Okasaki:1999}, \emph{union-find data structures}~\cite{journals/jar/ChargueraudP19},
+parts of standard OCaml\ libraries,
+like the \texttt{set.ml} library, as well as challenging examples considered in the literature, cf.~\cite{Okasaki:1999,ADM:2015,HDW:2017}.
+
+\end{frame}
+
+\begin{frame}
+  \frametitle{Amortised Cost Analysis for Lazy Evaluation}
+
+  \ueb{Milestones}
+
+  As milestone, we consider the analysis of \emph{lazy skew heaps}~\cite{Okasaki04} (see Figure~\ref{fig:3}).
+For validation, we will further consider (parts of) standard Haskell\ libraries like eg.\ Haskell's \texttt{containers} library, as well as challenging examples considered in the literature, cf.~\cite{Okasaki:1999,Okasaki04,JVFH:2017,MadhavanKK17,HVH:2020}.
+\end{frame}
+
+\begin{frame}
+  \frametitle{Expected Cost Analysis for Probabilistic Data Structures}
+
+  \ueb{Milestones}
+  As milestone, we consider the analysis of \emph{random search trees}~\cite{MartinezR98} (see Figure~\ref{fig:4}), which will require the support of non-constant probabilities.
+%
+Further interesting case studies include \emph{skip lists}~\cite{Pugh90}, \emph{randomised treaps}~\cite{EberlHN20}, as well as challenging examples considered in the literature,
+like the \emph{Coupon Collector problem}~\cite{MitzenMacherU05,KKMO:ACM:18,AMS:2020,ABD:2021} or \emph{randomised quicksort}~\cite{MR:1999,AvanziniLG19}.
+\end{frame}
+
+\section{Pilot Study: Splay Trees}
+\begin{frame}[fragile]{Motivating Example: \only<1-4>{Splay Trees}\only<5->{Randomised Splay Trees}}
+\vspace{-5mm}
+\begin{minipage}[t][3cm][t]{\textwidth}
+\begin{center}
+\begin{onlyenv}<1>
+  \begin{itemize}
+  \item \yellowemph{splay trees} are self-adjusting data structures, no explicit balancing
+    %clean and simple implementation
+  \item basic operation is called \yellowemph{splaying}, called for insertion, look-up and removal
+  \end{itemize}
+\end{onlyenv}
+\begin{onlyenv}<2-4>
+\begin{lstlisting}[basicstyle=\color{basic}\ttfamily\small,lineskip=-1mm]
+splay x t = match t with
+ | node cl c cr -> match cl with
+   | node bl b br -> match tick splay x bl with
+     | node al a ar -> node al a (node ar b (node br c cr))
+\end{lstlisting}
+\end{onlyenv}
+\begin{onlyenv}<5->
+\begin{lstlisting}[escapeinside={!}{!},basicstyle=\color{basic}\ttfamily\small,lineskip=-1mm]
+splay x t = match t with
+ | node cl c cr -> match cl with
+   | node bl b br -> match tick 1 2 splay x bl with
+     | node al a ar -> if coin
+       then tick 1 2 node al a (node ar b (node br c cr))
+       else          node (node (node al a ar) b br) c cr
+\end{lstlisting}
+\end{onlyenv}
+\end{center}
+\end{minipage}
+\vspace{-7mm}
+\begin{center}
+\begin{tikzpicture}[scale=1,
+subtree/.style = {isosceles triangle, draw=black, dotted, shape border rotate=90, minimum width=7mm},
+]
+\begin{scope}
+%\node[subtree] (8a) at (2,7.3) {} ;
+\node (6a) at (2,6.5) {$c$} ;
+\node (1a) at (1,6) {$b$} ;
+\node (2a) at (0,5.5) {$a$} ;
+\node[subtree] (3a) at (-1,4.4) {} ;
+\node[subtree] (4a) at (1,4.4) {} ;
+\node[subtree] (5a) at (2,5) {} ;
+\node[subtree] (7a) at (3,5.5) {} ;
+
+%\node at (8a.center) {$t$};
+\node at (3a.center) {$al$};
+\node at (4a.center) {$ar$};
+\node at (5a.center) {$br$};
+\node at (7a.center) {$cr$};
+
+%\path[->] (8a.south) edge (6a);
+\path[->] (6a) edge (1a);
+\path[->] (6a) edge (7a.north);
+\path[->] (1a) edge (2a);
+\path[->] (1a) edge (5a.north);
+\path[->] (2a) edge (3a.north);
+\path[->] (2a) edge (4a.north);
+
+%\node[subtree] (8b) at (7,7.3) {} ;
+\node (2b) at (7,6.5) {$a$} ;
+\node (1b) at (8,6) {$b$} ;
+\node (6b) at (9,5.5) {$c$} ;
+\node[subtree] (3b) at (6,5.5) {} ;
+\node[subtree] (4b) at (7,5) {} ;
+\node[subtree] (5b) at (8,4.5) {} ;
+\node[subtree] (7b) at (10,4.5) {} ;
+
+%\node at (8b.center) {$t$};
+\node at (3b.center) {$al$};
+\node at (4b.center) {$ar$};
+\node at (5b.center) {$br$};
+\node at (7b.center) {$cr$};
+
+%\path[->] (8b.south) edge (2b);
+\path[->] (2b) edge (3b.north);
+\path[->] (2b) edge (1b);
+\path[->] (1b) edge (4b.north);
+\path[->] (1b) edge (6b);
+\path[->] (6b) edge (7b.north);
+\path[->] (6b) edge (5b.north);
+
+\path[->] (4,5.5) edge node[above] {\small zig-zig} (5,5.5) ;
+\only<5->{
+\path[->] (4,5.5) edge node[below] {\yellowemph{$p=\sfrac{1}{2}$}} (5,5.5) ;
+}
+\end{scope}
+\end{tikzpicture}
+\end{center}
+\vspace{-2mm}
+%\begin{itemize}
+%\item Introduced by Sleator and Tarjan
+%\item Binary search tree
+%\item Strictly increasing inorder traversal
+%\item Self-adjusting (accessed items move to root).
+%\item Basic operations (insert, lookup, remove; all based on \lstinline|splay|)
+%\item original code imperative, shown code due to Okasaki, also develop splay heaps, as heap data structure
+\begin{itemize}
+\item<3-> \phantom{expected amortised} \alt<3>{\yellowemph{worst-case}}{worst-case} cost in $O(|t|)$
+\item<4-> 
+  \phantom{expected} \alt<4>{\yellowemph{amortised}}{amortised} worst-case cost in $O(\log(|t|))$, ie.\
+  \yellowemph{$\sfrac{3}{2}$}\tikzanchor[xshift=-5mm, yshift=1mm]{a} ${} \cdot \log(|t|)$
+  \callout<6>[callout=blue!5]{a}{210}{10mm}{\alert{\footnotesize due to Schoenmakers}}
+\item<5->
+  \yellowemph{expected amortised}  worst-case cost in $O(\log(|t|))$,
+  ie.\ \yellowemph{$\sfrac{9}{8}$}\tikzanchor[xshift=-5mm, yshift=1mm]{b} ${} \cdot \log(|t|)$
+  \callout<7>[callout=blue!5]{b}{210}{10mm}{\alert{\footnotesize due to \atlas}}
+  % 25 % speed-up
+\end{itemize}
+  
+% \begin{mybox}{Advantages}
+%   \begin{itemize}
+%   \item conceptionally simple operations, which are simple to implement
+%   \item small memory foot print
+%   \end{itemize}
+% \end{mybox}
+\end{frame}
+
+
+\begin{frame}[fragile]{Automation}
+\begin{enumerate}
+\item set up type systems, such that \yellowemph{logarithmic} costs become
+  representable
+\item type inference induces constraints 
+\item solve constraints
+\end{enumerate}
+\vspace{-.25cm}
+\begin{center}
+\begin{tikzpicture}[scale=0.25,stack/.style={rectangle split, rectangle split parts=#1,anchor=center}]
+
+\begin{scope}[local bounding box=group]
+
+%big wheels
+\begin{scope}[scale=1.5, yshift=1.5cm, xshift=8cm]\lightwheel\end{scope}
+\begin{scope}[scale=1.5, xshift=4cm]\darkwheel\end{scope}
+
+% tools
+\begin{scope}[xshift=4.6cm, yshift=3.8cm]\tool{}\end{scope}
+\begin{scope}[xshift=8.2cm, yshift=2.3cm]\tool{}\end{scope}
+\begin{scope}[xshift=8.5cm, yshift=-2.3cm]\tool{}\end{scope}
+\begin{scope}[xshift=10.8cm, yshift=-1.2cm]\tool{}\end{scope}
+\end{scope}
+
+\node (input) [
+  text width=2.5cm,
+  left=1.5cm of group.west,
+  align=center,
+] {Source Code} ;
+
+\draw[->] (input.east) -- (group.west);
+
+\node[
+  stack=3,
+  text width=2.5cm,
+  rectangle split,
+  align=center,
+  right=1.5cm of group.east,
+] (output) {
+\nodepart{one}  Amortised Complexity
+\nodepart{two} \emph{or}
+\nodepart{three} Unknown};
+\draw[->] (group.east) --  (output.one west);
+\draw[->] (group.east) -- (output.three west);
+\end{tikzpicture}
+\end{center}
+
+\begin{center}
+\url{github.com/lorenzleutgeb/atlas}\\[5mm]
+
+\begin{tabular}{c@{\qquad}c}
+  \includegraphics[height=1.5cm,width=1.5cm]{aec-badge_f_a_r.pdf}
+  &
+  \includegraphics[height=1.5cm,width=1.2cm]{1-available.pdf}
+  \\
+2021 &
+2022
+\end{tabular}
+\end{center}
+\end{frame}
+
+\section{Results}
+
+\begin{frame}
+\frametitle{Improvements over existing pen-and-paper proofs}
+\vspace{-.7cm}  
+\begin{center}  
+{\small
+  \begin{tabular}{|p{13ex}|l|l|l|}    
+    \hline
+    & \multicolumn{1}{|l}{%
+        \atlas %\cite{LMZ:2021,LMZ:2022}
+      }
+    & \multicolumn{1}{|l}{%
+        manual %\cite{AlbersK02,GambinM98,conf/cocoa/IaconoY16,Schoenmakers92}
+      }
+    & \multicolumn{1}{|l|}{%
+        semi-automated %\cite{NipkowB19}
+      }
+    \\
+    \hline\hline
+    \multicolumn{4}{|c|}{Randomised Meldable Heaps}
+    \\
+    \hdashline
+    \flst{insert} & $\log_2(|h|) + 1$ & $\bO(\log_2(|h|)$ & \_
+    \\[1mm]
+    \flst{delete\_min} & $2 \log_2(|h|)$ & $\bO(\log_2(|h|)$\tikzanchor[xshift=1mm,yshift=1mm]{a} 
+    \\[1mm]
+    \flst{meld} & $\log_2(|h_1|) + \log_2(|h_2|)$ & $\bO(\log_2(|h_1|)+ \log_2(|h_2|))$ & \_
+    \\[1ex]
+    \hline\hline
+    \multicolumn{4}{|c|}{Paring Heaps}
+    \\
+    \hdashline
+    \flst{merge\_pairs} & $\sfrac{3}{2} \log_2(|h|)$ & $\bO(\log_2(\size{h}))$ & $3\log_2(|h|)+4$
+    \\[1mm]
+    \flst{insert} & $\sfrac{1}{2}\log_2(\size{h})$\tikzanchor[xshift=5mm]{b}
+    & $\bO(1)$ & $\log_2(\size{h}+1)+1$\tikzanchor[xshift=-5mm]{c} 
+    \\[1mm]
+    \flst{merge} & $\sfrac{1}{2}\log_2(\size{h_1} + \size{h_2})+1$ & $\bO(1)$ & $\log_2(\size{h_1} + \size{h_2}+1)+2$
+    \\[1mm]
+    \flst{del\_min} & $\log_2(\size{h})$ & $\bO(\log_2(\size{h}))$ &  $3 \log_2(\size{h}+1)+4$
+    \\[1ex]
+    \hline\hline
+  \end{tabular}}
+\end{center}
+\vspace{-0.3cm}
+\callout<2>[callout=blue!5]{a}{180}{2mm}{\footnotesize Gambin \& Malinowski}
+\callout<3>[callout=blue!5]{b}{180}{2mm}{\footnotesize Iacono, very recently Sinnamon and Tarjan}
+\callout<4>[callout=blue!5]{c}{180}{2mm}{\footnotesize Nipkow et al.}
+% randomised meldable heaps, pen-and-paper proof due to Gambin and Malinowski
+% pairing heaps, due to Iacono, very recent work by Sinnamon and Tarjan, sim
+\onslide<5->
+\end{frame}
+
+\begin{frame}
+\vspace{-.7cm}    
+%\frametitle{Improvements (cont'd)}
+\begin{center}  
+{\small
+  \begin{tabular}{|p{13ex}|l|l|l|}    
+    \hline
+    & \multicolumn{1}{|l}{%
+        \atlas %\cite{LMZ:2021,LMZ:2022}
+      }
+    & \multicolumn{1}{|l}{%
+        manual %\cite{AlbersK02,GambinM98,conf/cocoa/IaconoY16,Schoenmakers92}
+      }
+    & \multicolumn{1}{|l|}{%
+        semi-automated %\cite{NipkowB19}
+      }
+    \\
+    \hline\hline
+    \multicolumn{4}{|c|}{Splay Trees}
+    \\
+    \hdashline
+    \flst{insert} & $2 \log_2(|t|) + \sfrac{3}{2}$ & $2\log_2(\size{t}+1)+\bO(1)$ & $2 \log_2(|t|) + \sfrac{3}{2}$
+    \\[1mm]
+    \hfill {\footnotesize (randomised)} & $\sfrac{3}{4} \log_2(|t|) + \sfrac{3}{4} \log_2(|t|+1)$ & \_ & \_
+    \\[1mm]
+    \flst{delete} & $\sfrac{5}{2} \log_2(|t|) + 3$ & $3\log_2(\size{t}+1)+\bO(1)$ & $3 \log_2(|t|) + 2$
+    \\[1mm]
+    \hfill {\footnotesize (randomised)} & $\sfrac{9}{8} \log(|t|)$ & \_ & \_
+    \\[1mm]
+    \flst{splay} & $\sfrac{3}{2} \log_2(|t|)$ &  \alt<1-3>{$\sfrac{3}{2}\log_2(\size{t})+1$}{\yellowemph{$\sfrac{3}{2}\log_2(\size{t})+1$}} & $\sfrac{3}{2} \log_2(|t|) + 1$
+    \\[1mm]
+    %GM: Lemma 2: recursion costs 1/2, rotation 1/2, probability 1/2
+    \hfill {\footnotesize (randomised)} & $\sfrac{9}{8} \log_2(|t|)$ & \alt<1-3>{$\sfrac{3}{4} + \sfrac{9}{4} \log_2(|t|)$}{\yellowemph{$\sfrac{3}{4} + \sfrac{9}{4} \log_2(|t|)$}}\tikzanchor[xshift=2mm,yshift=1mm]{a} & \_
+    \\[1ex]
+    \hline\hline
+    \multicolumn{4}{|c|}{Splay Heap}
+    \\
+    \hdashline
+    \flst{insert} & $\sfrac{1}{2} \log_2(|h|) + \log_2(|h|+1) + \sfrac{3}{2}$ & \_  &  $3\log_2(\size{h}+2) + 1$
+    \\[1mm]
+    \hfill {\footnotesize (randomised)} & $\sfrac{3}{4} \log_2(|h|) + \sfrac{3}{4} \log_2(|h|+1)$  & \_ & \_
+    \\[1mm]
+    \flst{delete\_min}  & $\log_2(|h|)$ & \_ & $2\log_2(\size{h}+1)+1$\tikzanchor[xshift=-13mm,yshift=-3mm]{c} 
+    \\[1mm]
+    \hfill {\footnotesize (randomised)} & $\sfrac{3}{4} \log_2(|h|)$ & \_ & \_
+    \\
+    \hline    
+\end{tabular}}
+\end{center}
+\vspace{-0.3cm}
+\callout<2>[callout=blue!5]{a}{180}{2mm}{\footnotesize Albers et al.}
+\callout<3>[callout=blue!5]{c}{90}{2mm}{\footnotesize Nipkow et al.}
+\onslide<4->
+\end{frame}
+
+\section{Methodology}
+
+\begin{frame}{Amortised Analysis: Potential Method}
+% \phi ... potential function
+% a_f ... amortized cost
+% c_f ... cost
+% f ... operation
+
+Introduced to analyse asymptotic behaviour over \alert{sequences} of operations.
+
+The original formulation by Sleator and Tarjan%
+\footnote{D.~Sleator and R.~Tarjan. Self-adjusting binary search trees.
+  {\em JACM}, 32(3):652--686, 1985;
+  R.~Tarjan. Amortized computational complexity. {\em SIAM J.~Alg.\ Disc.\ Meth}, 6(2):306--318, 1985.
+}
+%
+\begin{align}
+  \red{a_f(t)} &= \green{c_f(t)} + \blue{\phi(f(t))} - \red{\phi(t)}
+  \\
+%\red{\phi(t) + a_f(t)} &= \green{c_f(t)} + \blue{\phi(f(t))}
+\intertext{is generalised to}
+\red{\psi(t)} &\geq \green{c_f(t)} + \blue{\phi(f(t))} \\
+  \red{\psi(t)} - \blue{\phi(f(t))} &\geq \green{c_f(t)} \label{eq:bound}
+\end{align}
+
+%\vspace{5mm}
+
+%{\small{(choose $\red{\psi(t)} \coloneqq \red{a_f(t)} + \red{\phi(t)}$ to get back up)}}
+
+\end{frame}
+
+\begin{frame}{Logarithmic Amortised Analysis}
+\begin{itemize}
+\item \yellowemph{logarithmic} means that $\green{a_f(t)}$ is in $O(\log(\size{t}))$.
+\item<2-> We expect the definition of $\phi$, $\psi$ to involve logarithmic terms
+\begin{align}
+\text{Size:}&&\size{\leaf} &\defsym 1&
+\size{\tree{l}{\cdot}{r}} &\defsym \size{l} + \size{r}\\
+\text{Rank:}&&\rk(\leaf) &\defsym 1&
+\rk(\tree{l}{\cdot}{r}) &\defsym \rk(l) + \log(\size{l}) + \log(\size{r}) + \rk(r)
+\end{align}
+
+\item<3-> Potential functions we studied are adapted from Schoenmakers%
+    \footnote{B.~Schoenmakers. A systematic analysis of splaying. {\em {IPL}}, 45(1):41--50, 1993.}
+    
+\begin{equation}
+q_{*} \cdot \rk(t) + \sum_{a, b \in \N} q_{(a, b)} \cdot \alt<1-4>{\log(a \cdot \size{t} + b)}{\underbrace{\log(a \cdot \size{t} + b)}_{=: p(a,b)}}
+\end{equation}
+
+\item<4-> E.g.\ for \lstinline|splay| we get:
+\vspace{-.5cm}
+  \begin{alignat}{2}
+\red{\psi(t)} &= \sfrac{3}{4}\rk(t) + \sfrac{3}{4} + \sfrac{9}{8} \log(\size{t}) \\
+\blue{\phi(t)} &= \sfrac{3}{4}\rk(t) + \sfrac{3}{4}
+\end{alignat}
+\end{itemize}
+
+\onslide<5->
+\end{frame}
+
+\begin{frame}
+  \frametitle{Type-Based Expected Amortised Cost Analysis}
+\begin{itemize}
+\item \alert<3>{strict, first-order functional language.}
+\item \alert<3>{necessarily simple, sufficiently powerful.}
+\item{high-level architecture: generate constraints (via typing rules), solve.}
+\end{itemize}
+
+\onslide<2->
+\begin{theorem}[Soundness]
+\centering
+\smallskip  
+If
+\uncover<3->{$\alt<3>{e\hspace{8ex}}{\eval{\uncover<4->{\sigma}}{\uncover<5->{c}}{e}{\uncover<4->{\mu}}}$}
+and
+$\onslide<6->{\Gamma \onslide<8->{{\mid} \red{Q}} \vdash} \onslide<3->{e} \onslide<6->{: \alpha} \onslide<8->{{\mid} \blue{Q'}}$
+then
+$\onslide<7->{\underbrace{\Phi(\Gamma\sigma\onslide<8->{{\mid} \red{Q}})}_{\red{\psi(t)}} \geqslant} \onslide<5->{c}
+  \onslide<7->{+ \Expect{\mu}{\lambda v. \underbrace{\Phi(v \onslide<8->{{\mid} \blue{Q'}})}_{\blue{\phi(f(t))}}}}$.
+\end{theorem}
+ 
+Ingredients:
+\begin{itemize}
+\item<3-> \alert<3>{syntax}
+\item<4-> operational big-step semantics \alert<4>{$\eval{\sigma}{\onslide<5->{c}}{e}{\mu}$, $\mu$ distribution of final states} \onslide<5->{with \alert<5>{cost} measure}
+\item<6-> type system $\vdash$ \onslide<8->{with \alert<8>{annotated} types}
+\item<9-> \emph{read:} given a typing ${\Gamma {{\mid} \red{Q}} \vdash} {e: \alpha}{{\mid} \blue{Q'}}$ the theorem holds for
+  \emph{all substitutions} $\sigma$    
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Operational Semantics%
+    \footnote{%
+    Taking (a lot) inspiration from Borgström et al. A lambda-calculus foundation for universal probabilistic programming, ICFP'16 and Wang et al. Raising expectations: automating expected cost analysis with types, ICFP'20.}}
+  
+\onslide<1->{What is ``cost''?}
+\onslide<2->{\begin{mathpar}
+\infer
+[(tick)]
+  {\evaln{\sigma}{n+1}{c+\prob{\mu} \cdot \sfrac{a}{b}}{\tick[$a$][$b$]{e}}{\mu}}
+  {\evaln{\sigma}{n}{c}{e}{\mu}}
+\end{mathpar}}
+
+\onslide<1->{How does ``cost'' compose?}
+\onslide<3->{\begin{mathpar}
+\infer
+[(let)]
+  {\evaln{\sigma}{n+1}{c_1 + \sum_{w \in \supp{\nu}} \nu(w) \cdot c_w}{\flstk{let }x\flst{ = }e_1\flstk{ in }e_2}{\sum_{w \in \supp{\nu}} \nu(w) \cdot \mu_w}}%
+  {%
+  \evaln{\sigma}{n}{c_1}{e_1}{\nu}
+  &
+  \text{for all $w \in \supp{\nu}$:
+  $\evaln{\sigma[x \mapsto w]}{n}{c_w}{e_2}{\mu_w}$
+  }
+  }
+\end{mathpar}}
+\end{frame}
+
+\begin{frame}[fragile]{Example: Descending a Binary Tree}
+\begin{center}
+\begin{lstlisting}[escapeinside={!}{!},basicstyle=\color{basic}\ttfamily]
+descend t = match t with
+  | leaf       -> leaf
+  | node l a r -> if coin
+    then let xl = tick descend l in node xl a  r     (* !\boxemph{$\swarrow$}! *)
+    else let xr = tick descend r in node  l a xr     (* !\boxemph{$\searrow$}! *)
+\end{lstlisting}
+\end{center}
+
+\end{frame}
+\begin{frame}[fragile]{Example: Descending a Binary Tree}
+\vspace{-1cm}
+\begin{equation*}
+\infer
+  [\onslide<3->{\rulematch}]%
+  {\tjudge{\typed{t}{\TreeShort}}{Q}{\textup{\lstinline[keepspaces=true]!match t with | leaf -> leaf | node l a r -> ! \boxemph{$\swarrow{}\!\!\!\!\searrow$}}}{\TreeShort}{Q'}}%
+  {\onslide<3->{%
+    \infer%
+    [\onslide<4->{\rulew}]%
+    {\tjudge{\typed{l}{\TreeShort}, \typed{r}{\TreeShort}}{Q_1}{\textup{\lstinline!if coin then! \boxemph{$\swarrow$} \lstinline!else! \boxemph{$\searrow$}}}{\TreeShort}{Q'}}%
+    {\onslide<4->{%
+		  \infer%
+        [\onslide<6->{\rulecoin}]%
+        {\tjudge{\typed{l}{\TreeShort}, \typed{r}{\TreeShort}}{Q_2}{\textup{\lstinline!if coin then! \boxemph{$\swarrow$} \lstinline!else! \boxemph{$\searrow$}}}{\TreeShort}{Q'}}%
+        {\onslide<6->{%
+          \infer%
+            [\onslide<7->{\rulelet}]%
+            {\tjudge{\typed{l}{\TreeShort}, \typed{r}{\TreeShort}}{Q_3}{\textup{\lstinline|let xl = tick descend l in node xl a r|}}{\TreeShort}{Q'}}
+            {\onslide<7->{%
+              \infer%
+                [\onslide<8->{\ruletick}]%
+                {\tjudge{\typed{l}{\TreeShort}}{Q_4}{\textup{\lstinline|tick descend l|}}{\TreeShort}{Q_6}}
+                {\onslide<8->{%
+                  \infer%
+                    [\onslide<9->{\ruleapp}]%
+                    {\tjudge{\typed{l}{\TreeShort}}{Q_5}{\textup{\lstinline|descend l|}}{\TreeShort}{Q_6}}%
+                    {\onslide<9->{\typed{\textup{\lstinline{descend}}}{\atypdcl{\TreeShort}{Q}{\TreeShort}{Q'}}}}
+                }}
+                &
+                \tjudge{\typed{x_l}{\TreeShort},\typed{r}{\TreeShort}}{Q_7}{\textup{\lstinline|node xl a r|}}{\TreeShort}{Q'}
+            }}
+        }}
+    }}
+  }}
+\end{equation*}
+\vspace*{-5mm}
+\begin{minipage}[t][2cm][t]{\textwidth}  
+\alt<1-2>{%
+Heuristically choose shape of potential functions, then solve:\tikzanchor[xshift=0mm, yshift=1mm]{c}
+\begin{align*}  
+  \red{\potential{\typed{t}{\Tree}}{Q}} & \defsym \GRAY{q_\ast} \cdot \rk(t) + \GRAY{q_{(1,0)}}
+  \cdot p_{(1,0)}(t) +
+                                        \GRAY{q_{(0,2)}}\cdot p_{(0,2)}(t)\\
+\blue{\potential{\typed{t}{\Tree}}{Q'}} & \defsym \GRAY{q'_\ast} \cdot \rk(t)
+      + \GRAY{q'_{(1,0)}} \cdot p_{(1,0)}(t) + \GRAY{q'_{(0,2)}} \cdot p_{(0,2)}(t)
+\end{align*}
+}%
+{\alt<3>{Distribute potential of \lstinline|t| to \lstinline|l| and \lstinline|r|:%
+\begin{align*}
+q^{(1)}_1  = q^{(1)}_2 = q_\ast && q^{(1)}_{(1,1,0)}  = q_{(1,0)} && q^{(1)}_{(1,0,0)} = q^{(1)}_{(0,1,0)} = q_\ast && q^{(1)}_{(0,0,2)} = q_{(0,2)}
+\end{align*}
+}%
+{\alt<4-5>{We can weaken/adapt/rearrange coefficients, given
+\begin{align}
+\Phi(\sigma; \typed{l}{\TreeShort}, \typed{r}{\TreeShort}; Q_1) \geqslant \Phi(\sigma; \typed{l}{\TreeShort}, \typed{r}{\TreeShort}; Q_2) \qquad \text{for all valuations $\sigma$}
+\end{align}
+which we prove by using facts about $\log$\tikzanchor[xshift=-5mm, yshift=2mm]{c}
+and Farkas' lemma.\tikzanchor[xshift=0mm, yshift=1mm]{a}
+}%
+{\alt<6>{Formalisation of a coin toss with $p=\sfrac{1}{2}$. Distribution of potential $Q_2 = p \cdot Q_3 + (1-p) \cdot Q_4$:
+%
+\begin{align*}
+  q^{(2)}_{(0,0,2)} & = \sfrac{1}{2} \cdot q^{(3)}_{(0,0,2)} + \sfrac{1}{2} \cdot q^{(4)}_{(0,0,2)} &
+  q^{(2)}_{(1,0,0)} & = \sfrac{1}{2} \cdot q^{(3)}_{(1,0,0)} + \sfrac{1}{2} \cdot q^{(4)}_{(1,0,0)} \\
+  q^{(2)}_{(0,1,0)} & = \sfrac{1}{2} \cdot q^{(3)}_{(0,1,0)} + \sfrac{1}{2} \cdot q^{(4)}_{(0,1,0)}
+\end{align*}
+}%
+{\alt<7>{Most involved rule of the type system. Roughly:
+\begin{alignat*}{7}
+Q_3 & \ & = & \ & Q_4    & \ + \ && \Delta & \ &   & \ &     & \quad & \text{Input potential ($Q_3$) covers recursive call ($Q_4$) and remainder ($\Delta$).}\\
+    & \ &   & \ & \Delta & \ + \ && Q_6    & \ & = & \ & Q_7 & \quad & \text{Remainder ($\Delta$) and leftover ($Q_6$) cover result ($Q_7$).}
+\end{alignat*}
+}%
+{\alt<8>{Ensure that costs are accounted for:
+
+\begin{align*}
+Q_4 = Q_5 + 1 
+\end{align*}
+}%
+{\alt<9>{Verify that recursive call is well-typed:
+\begin{align*}
+Q_5 &= Q \\
+Q_6 &= Q'
+\end{align*}
+}{Other}}}}}}}
+\end{minipage}
+\vspace*{-5mm}
+\callout<2>[callout=blue!5]{c}{180}{5mm}{\alert{\footnotesize and set $q_{(1,0)}=1$, only}}
+\callout<5>[callout=blue!5]{a}{180}{10mm}{\alert{\footnotesize essential for Z3}}
+\callout<5>[callout=blue!5]{c}{270}{5mm}{\alert{\footnotesize eg. $2 \cdot \log(x+y) \geqslant \log(x)+\log(y)+2$}}
+
+\end{frame}
+
+\begin{frame}{Soundness: Small-Step}
+\begin{equation*}
+\infer[\alert<1,5>{\ruletick}]{%
+  \tjudge{\Gamma}{Q+\sfrac{a}{b}}{\textup{\lstinline!tick a b!}\ e}{\alpha}{Q'}
+}{%
+  \tjudge{\Gamma}{Q}{e}{\alpha}{Q'}
+}
+\end{equation*}
+
+\begin{theorem}[Soundness for \alert<1>{$\ruletick$}] \label{t:1}
+Let $\Program$ be well-typed. Suppose $\tjudge{\Gamma}{Q}{e}{\alpha}{Q'}$ and $e\sigma \tomulti{c}_\infty\tikzanchor[xshift=-5mm,yshift=-2mm]{a} \mu$.
+Then $\spotential{\Gamma}{Q} \geqslant c + \Expect{\mu}{\lambda v. \potential{v}{Q'}}$.
+%Further, if $\tjudgecf{\Gamma}{Q}{e}{\alpha}{Q'}$, then $\spotential{\Gamma}{Q} \geqslant \Expect{\mu}{\lambda v. \potential{v}{Q'}}$.
+\end{theorem}
+
+\begin{itemize}
+  \item<3-> semantics considers cost on \alert<3->{all paths}.
+  \item<4-> typing \alert{does imply} positive almost-sure termination.
+  \item<5-> generated constraints are inflexible
+  \item<5-> randomised splay trees cannot be handled
+\end{itemize}
+
+\callout<2>[callout=blue!5]{a}{90}{2mm}{\footnotesize based on probabilistic ARSs.}
+\end{frame}
+
+\begin{frame}{Soundness: Big-Step}
+\begin{equation*}
+\infer[\alert<1>{\ruletickast}]{%
+  \tjudge{\Gamma}{Q}{\textup{\lstinline!tick a b!}\ e}{\alpha}{Q'-\sfrac{a}{b}}
+}{%
+  \tjudge{\Gamma}{Q}{e}{\alpha}{Q'}
+}
+\end{equation*}
+
+\begin{theorem}[Soundness for \alert<1>{$\ruletickast$}] \label{t:2}
+Let $\Program$ be well-typed.
+Suppose $\tjudge{\Gamma}{Q}{e}{\alpha}{Q'}$ and $\eval{\sigma}{c}{e}{\mu}$.
+Then, we have $\spotential{\Gamma}{Q} \geqslant c + \Expect{\mu}{\lambda v. \potential{v}{Q'}}$.
+%Further, if $\tjudgecf{\Gamma}{Q}{e}{\alpha}{Q'}$, then $\spotential{\Gamma}{Q} \geqslant \Expect{\mu}{\lambda v. \potential{v}{Q'}}$.
+\end{theorem}
+
+\begin{itemize}
+  \item<2-> big-step semantics considers cost on \alert<1>{all terminating paths}.
+  \item<3-> typing \alert{does not imply} termination.
+  \item<4-> generated constraints are more flexible, i.e.\ more programs can be typed.
+  \item<5-> can be combined with separate termination analysis.
+\end{itemize}
+
+\end{frame}
+
+\section{Project Results and Ongoing Work}
+
+\begin{frame}
+  \frametitle{Sublinear Amortised Cost Analysis}
+
+  \begin{itemize}
+  \item rank-balanced search trees
+  \item Binomial and Fibonacci heaps
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Expected Cost Analysis for Probabilistic Data Structures}
+
+  \begin{itemize}
+  \item randomised melding heaps
+  \item zip trees
+  \end{itemize}
+\end{frame}
+
+
+\section{Thank You for Your Attention!}
+
+% \bibliographystyle{plain}
+% \bibliography{slides}
+\end{document}
+
+\section{Conclusions et al.}
+\begin{frame}
+  \frametitle{Conclusions}
+  
+  \begin{itemize}
+  \item fully automated analysis of (expected) cost analysis of data structures, like
+    (randomised) splay trees, splay heaps, and pairing heaps and
+    randomised melding heaps.
+  \item bounds match or improve literature (sophisticated pen-and-paper proofs by Schoenmakers and \textsf{Isabelle/HOL} proofs by Nipkow and Brinkop).
+  \item<2-> pen-and-paper proofs may incorporate functional correctness arguments, we could dispense with.
+  \item<2-> pen-and-paper proofs may run out of steam, due to the tedious calculations necessary; \atlas\ pervails
+  \end{itemize}
+  
+\end{frame}
+
+\begin{frame}
+  \frametitle{Summary%
+    \footnote{This work is dedicated to Martin Hofmann, whose tragic accident happened before we could finalise the results.}
+  }
+
+  Automated amortised analysis achieved by:
+  \begin{itemize}
+  \item user fixes template potential functions.
+  \item constraints over template function coefficients are generated.
+  \item optimising constraint solver searches for 'small' coefficients.
+  \end{itemize}
+
+  \medskip
+  
+  \begin{mybox}{Vision}
+    New method for data structure analysis. Extend to further types of data structures (for which different potential functions are needed).
+  \end{mybox}
+\end{frame}  
+
+\begin{frame}
+\frametitle{Ongoing and Future Work}
+\vspace{-1mm}
+\begin{mybox}{A}
+  data structures are typically formulated based on \textbf{invariants}
+  \begin{itemize}
+  \item binomial heaps
+  \item Fibonacci heaps
+  \item (weak) AVL trees
+  \end{itemize}
+  %
+  how to capture these invariants and exploit them in type inference?
+\end{mybox}
+\vspace{-1mm}
+\onslide<2->
+\begin{mybox}{B}
+    \begin{itemize}
+    \item extend probabilistic language feature, eg. dynamic sampling instructions
+    \item \textbf{zip trees} and friends are of interest
+    \end{itemize}
+\end{mybox}
+\vspace{-1mm}
+\onslide<3->
+\begin{mybox}{C}
+  capture lazy evaluation, and thus eg.\ \textbf{lazy skew heaps}.
+\end{mybox}
+
+\end{frame}  
+

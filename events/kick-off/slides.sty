@@ -1,0 +1,276 @@
+% style file for AUTOSARD
+
+% tex-spielereien
+\newcommand{\reference}[2]{\structure{#1}\quad{#2}}
+\newcommand*{\cOne}{\text{\ding{192}}}
+\newcommand*{\cTwo}{\text{\ding{193}}}
+\newcommand*{\cThree}{\text{\ding{194}}}
+\newcommand*{\cFour}{\text{\ding{195}}}
+\newcommand*{\cFive}{\text{\ding{196}}}
+\newcommand*{\cSix}{\text{\ding{197}}}
+\newcommand*{\Rckmark}{\RED{\checkmark}}
+\newcommand*{\Rno}{\RED{-}}
+\newcommand*{\bskip}{\vspace{-\baselineskip}}
+\newcommand{\ueb}[1]{{\usebeamercolor[fg]{palette primary}{\it #1}}}
+
+% % bubbles (depreciate!)
+% \newcommand{\bubble}[3]{%
+%   \begin{tikzpicture}
+%     \node[rectangle callout, minimum size=0cm, callout relative pointer={(#1,#2)}, draw=black, fill=black!10!white] (bubble)
+%     {#3};
+%   \end{tikzpicture}
+% }
+ 
+% \newcommand{\overlayed}[4]{%
+%   \begin{tikzpicture}
+%     \node at (0,0) (text) {%
+%       \begin{minipage}[t]{\linewidth}
+%         {#3}
+%       \end{minipage}
+%     };
+%     \node at (#1,#2) (overlay) {%
+%       \begin{minipage}[t]{\linewidth}
+%         {#4}\end{minipage}
+%     };
+%    \end{tikzpicture}
+% }
+
+% callouts
+\newcommand{\tikzanchor}[2][]{\tikz[overlay,remember picture]{\coordinate[#1] (#2) at (0,0) {};}}
+
+\tikzset{callout/.style={rounded corners=2pt,draw=#1, inner sep=2mm,fill=#1,font=\color{white}}}
+
+\tikzstyle{greenbox}=[thick,draw=green!50!black,fill=green!5!white,text=green!50!black]
+\tikzstyle{bluebox}=[thick,draw=blue!50!black,fill=blue!5!white,text=blue!50!black]
+\tikzstyle{redbox}=[thick,draw=red!50!black,fill=red!10!white,text=red!50!black]
+\tikzstyle{alertbox}=[thick,draw=alerted text.fg,fill=alerted text.fg!7,text=alerted text.fg]
+\tikzstyle{orangebox}=[thick,draw=orange,fill=orange!10!white,text=orange]
+
+%usage : \callout<1>{anchronode}{angle}{len}{the text}
+\NewDocumentCommand{\callout}{r<> O{} m m m m}{%
+\only<#1>{\tikz[overlay, remember picture]{%
+    \usebeamercolor{structure}
+    \node[text=fg,draw=fg,fill=fg!7,align=center, inner sep=1mm,draw,rectangle callout,anchor=pointer,callout relative pointer={(#4:#5)},#2]%
+    at (#3) {\strut #6};}}%
+}
+
+% \newsavebox\floatingbox
+% \NewDocumentEnvironment{floating}{D(){0,0}O{center}}
+% {\begin{lrbox}{\floatingbox}\bgroup}
+% {\egroup\end{lrbox}%
+% \begin{tikzpicture}[overlay, remember picture]
+% \node[align=left,inner sep=0,anchor=#2] at (#1){\usebox\floatingbox};
+% \end{tikzpicture}}
+
+% automation
+\tikzstyle{lines}=[draw=blue,shorten <=1mm,shorten >=1mm, thick]
+\tikzstyle{wheelline}=[draw=black!60]
+\definecolor{base}{rgb}{0.0,0.0,0.0}
+\tikzstyle{wheeldarkouter}=[draw=base!60, fill=base!20]
+\tikzstyle{wheeldarkinner}=[draw=base!50, fill=base!30]
+\tikzstyle{wheellightouter}=[draw=base!40, fill=base!10]
+\tikzstyle{wheellightinner}=[draw=base!30, fill=base!20]
+\tikzstyle{toolouter}=[draw=base!80, fill=base!40]
+\tikzstyle{toolinner}=[draw=base!80, fill=base!50]
+\tikzstyle{background}=[fill=blue!10]
+\tikzset{onslide/.code args={<#1>#2}{%
+  \only<#1>{\pgfkeysalso{#2}}
+}}
+
+\newcommand{\tool}[1]{
+\begin{scope}[scale=0.7]
+\fill[toolouter] (0:2cm)
+  \foreach \angle in {0,30,...,330}  % 12
+  {  -- (\angle+10:2cm) .. controls (\angle+16:1.6cm) and (\angle+24:1.6cm) .. (\angle+30:2cm) };
+\fill[toolinner] (0,0) circle (1.2);
+\fill[background] (0,0) circle (1.05);
+\node[scale=0.5] {#1};
+\end{scope}
+}
+\newcommand{\lightwheel}{
+ \filldraw[wheellightouter] (0:2cm)
+  \foreach \angle in {0,22.5,...,337.5}  % 16 
+   { -- (\angle+7:2cm) .. controls (\angle+14.75:1.7cm) .. (\angle+22.5:2cm)};
+ \fill[wheellightinner] (0,0) circle (1.4);
+ \fill[background, draw=base!50] (0,0) circle (.4);
+ \foreach \angle in {0,45,...,315}
+   \fill[wheellightouter] (\angle:1) circle (0.17);
+}
+\newcommand{\darkwheel}{
+ \filldraw[wheeldarkouter] (0:2cm)
+  \foreach \angle in {0,22.5,...,337.5}  % 16 
+   { -- (\angle+7:2cm) .. controls (\angle+14.75:1.7cm) .. (\angle+22.5:2cm)}; 
+ \fill[wheeldarkinner] (0,0) circle (1.4);
+ \fill[background, draw=base!50] (0,0) circle (.4);
+ \foreach \angle in {0,45,...,315}
+   \fill[wheeldarkouter] (\angle:1) circle (0.17);
+}
+
+% motivation
+\newcommand*{\resource}{\lozenge}
+\newcommand*{\LFDiamond}{\m{LF}_\lozenge}
+
+% misc
+\newcommand*{\tpkt}{\rlap{$\;$.}}
+\newcommand*{\tkom}{\rlap{$\;$,}}
+\newcommand{\defsym}{\mathrel{:=}}
+\newcommand{\defeqv}{\mathrel{:\Longleftrightarrow}}
+\newcommand*{\m}[1]{\mathsf{#1}}
+
+% Generic Definitions
+\DeclareMathOperator{\dom}{\m{dom}}
+\DeclareMathOperator{\range}{\m{rg}}
+\newcommand*{\N}{{\mathbb{N}}}
+\newcommand*{\Qplus}{{\mathbb{Q}^+_0}}
+\newcommand*{\Rplus}{{\mathbb{R}^+_0}}
+\newcommand*{\Z}{{\mathbb{Z}}}
+\newcommand*{\bO}{O}
+\newcommand*{\rst}[2]{{#1}\!\restriction\!{#2}}
+\newcommand*{\dunion}{\mathrel{\uplus}}
+\DeclareMathOperator{\pow}{\mathcal{P}}
+\newcommand*{\stack}[2]{\genfrac{}{}{0pt}{3}{#1}{#2}}
+\newcommand*{\Program}{\mathsf{P}}
+
+% syntax and semantics
+\newcommand*{\FS}{\mathcal{F}}
+\newcommand*{\VS}{\mathcal{V}}
+\newcommand*{\FScf}{\mathcal{F}^{\text{cf}}}
+% \newcommand*{\tree}[3]{\lstinline{(}{#1}\lstinline{,} {#2}\lstinline{,} {#3}\lstinline{)}}
+% \newcommand*{\tree}[3]{\textup{\lstinline{(}{\ensuremath{#1}}\lstinline{,} {\ensuremath{#2}}\lstinline{,} {\ensuremath{#3}}\lstinline{)}}}
+\newcommand*{\treelit}[3]{\lstinline{({#1},{#2},{#3})}}
+\newcommand*{\tree}[3]{\textup{\lstinline{node} {\ensuremath{#1}} {\ensuremath{#2}} {\ensuremath{#3}}}}
+% GM: not necessary
+\newcommand*{\treevalue}[3]{\langle {#1},{#2},{#3} \rangle}
+%\newcommand*{\leafvalue}{\m{leaf}}
+% \newcommand*{\truevalue}{\m{true}}
+% \newcommand*{\falsevalue}{\m{false}}
+\newcommand*{\leaf}{\textup{\lstinline{leaf}}}
+\newcommand*{\true}{\textup{\lstinline{true}}}
+\newcommand*{\false}{\textup{\lstinline{false}}}
+\newcommand*{\cif}{\textup{\lstinline{if}}}
+\newcommand*{\cthen}{\textup{\lstinline{then}}}
+\newcommand*{\celse}{\textup{\lstinline{else}}}
+\newcommand*{\vlet}{\textup{\lstinline{let}}}
+\newcommand*{\equal}{\textup{\lstinline{=}}}
+\newcommand*{\vin}{\textup{\lstinline{in}}}
+\newcommand*{\match}{\textup{\lstinline{match}}}
+\newcommand*{\with}{\textup{\lstinline{with}}}
+\newcommand*{\arrow}{\mathrel{\textup{\lstinline{->}}}}
+\newcommand*{\eval}[4]{{#1} \sststile{}{#2} {{#3} \Rightarrow {#4}}}
+\newcommand*{\evaln}[5]{{#1} \sststile{#2}{#3} {{#4} \Rightarrow {#5}}}
+\newcommand*{\supp}[1]{\m{supp}(#1)}
+
+% Hacks for listings
+\newcommand{\flst}[1]{\text{\small\color{darkviolet}\texttt{{#1}}}}
+\newcommand{\flstk}[1]{\text{\small\color{keyword}\texttt{{#1}}}}
+\newcommand{\flstc}[1]{\text{\small\color{constructor}\texttt{{#1}}}}
+\newcommand{\flstp}[1]{\text{\small\color{extension}\texttt{{#1}}}}
+\newcommand{\flsttree}[3]{\text{\small\color{constructor}\texttt{(}}{#1}\text{\small\color{darkviolet}\texttt{,}}{#2}\text{\small\color{darkviolet}\texttt{,}}{#3}\text{\small\color{constructor}\texttt{)}}}
+
+%\newcommand*{\var}[1]{\flst{#1}}
+
+% splaying
+\newcommand*{\splay}{\lstinline{splay}}
+\newcommand*{\size}[1]{\lvert {#1} \rvert}
+
+% Typing
+
+%% Types
+\newcommand*{\Base}{\m{B}}
+\newcommand*{\Bool}{\m{Bool}}
+\newcommand*{\Tree}{\m{T}}
+\newcommand*{\TypeA}{\alpha}
+\newcommand*{\TypeB}{\beta}
+\newcommand*{\TypeC}{\gamma}
+\newcommand*{\TypeD}{\delta}
+\newcommand*{\TypeE}{\varepsilon}
+
+%% Abbreviated Types
+\newcommand*{\BaseShort}{\m{B}}
+\newcommand*{\BoolShort}{\Bool}
+\newcommand*{\TreeShort}{\m{T}}
+
+%% Type Declarations (for functions)
+\newcommand*{\typdcl}[2]{{#1} \to {#2}}
+\newcommand*{\atypdcl}[4]{{#1} {\mid} {#2} \to {#3} {\mid} {#4}}
+\newcommand*{\atypdclcf}[4]{{#1} {\mid} {#2} \to^{\text{cf}} {#3} {\mid} {#4}}
+
+\newcommand*{\typed}[2]{{#1}{\colon}\!{#2}}
+\newcommand*{\annotatedtype}[2]{{#1} {\mid} {#2}}
+\newcommand*{\TDannot}{\FS_{\m{log}}}
+\newcommand*{\typedomain}[1]{\llbracket {#1} \rrbracket}
+\newcommand*{\share}[1]{\curlyvee\!({#1})}
+\newcommand*{\len}[1]{\lvert {#1} \rvert}
+\DeclareMathOperator{\rk}{\m{rk}}
+\newcommand*{\brac}[1]{\mathsf{[} {#1} \mathsf{]}}
+
+% Symbolic Potential
+\newcommand*{\potential}[2]{\Phi({#1} {\mid} {#2})}
+\newcommand*{\spotential}[3][\sigma]{\Phi({#1};{#2} {\mid} {#3})}
+
+%% Typing Judgements
+\newcommand*{\tjudge}[5]{{#1} {\mid} {#2} \vdash \typed{#3}{#4} {\mid} {#5}}
+\newcommand*{\tjudgecf}[5]{{#1} {\mid} {#2} \vdash^{\text{cf}} \typed{#3}{#4} {\mid} {#5}}
+
+% resource polynomials
+\newcommand*{\BF}{\mathcal{BF}}
+\newcommand*{\RF}{\mathcal{RF}}
+
+%% Typing Rule Names
+\newcommand*{\trule}[1]{\ensuremath{(\m{{#1}})}}
+
+%%% Shorthands for common typing rule names
+\newcommand*{\ruleleaf}{\trule{leaf}}
+\newcommand*{\rulenode}{\trule{node}}
+\newcommand*{\ruleite}{\trule{ite}}
+\newcommand*{\rulew}{\trule{w}}
+\newcommand*{\rulewvar}{\trule{w:var}}
+\newcommand*{\rulelet}{\trule{let}}
+\newcommand*{\ruleletgen}{\trule{let:gen}}
+\newcommand*{\rulelettree}{\trule{let:T}}
+%GM: same name
+%\newcommand*{\rulelettreecf}{\trule{let:T:cf}}
+\newcommand*{\rulelettreecf}{\trule{let:T}}
+\newcommand*{\rulevar}{\trule{var}}
+\newcommand*{\rulematch}{\trule{match}}
+\newcommand*{\ruleapp}{\trule{app}}
+\newcommand*{\ruleappcf}{\trule{app:cf}}
+\newcommand*{\ruleshare}{\trule{share}}
+\newcommand*{\rulecmp}{\trule{cmp}}
+\newcommand*{\ruleshift}{\trule{shift}}
+% Probabilistic Rules
+\newcommand*{\rulecoin}{\trule{ite:coin}}
+\newcommand*{\ruletick}{\trule{tick:now}}
+\newcommand*{\ruletickast}{\trule{tick:defer}}
+
+\newcommand*{\veca}{\vec{a}}
+\newcommand*{\vecb}{\vec{b}}
+\newcommand*{\vect}{\vec{t}}
+\newcommand*{\vecu}{\vec{u}}
+
+% Tools
+\newcommand*{\isabelle}{\textsf{Isabelle}/\textsf{HOL}}
+\newcommand*{\tct}{\textsf{T\kern-0.2em\raisebox{-0.3em}C\kern-0.2emT}}
+\newcommand*{\raml}{\textsf{RaML}}
+\newcommand*{\costa}{\textsf{COSTA}}
+\newcommand*{\ciaopp}{\textsf{CiaoPP}}
+\newcommand*{\cofloco}{\textsf{CoFloCo}}
+\newcommand*{\loopus}{\textsf{LOOPUS}}
+\newcommand*{\aprove}{\textsf{AProVE}}
+\newcommand*{\allocs}{\textsf{Allocs}}
+\newcommand*{\pubs}{\textsf{PUBS}}
+\newcommand*{\raja}{\textsf{RAJA}}
+\newcommand*{\atlas}{\ensuremath{\mathsf{ATLAS}}}
+
+% PARS
+% \newcommand{\lmulti}{\{}
+% \newcommand{\rmulti}{\}}
+\newcommand{\toop}[1]{\stackrel{#1}{\red}}
+\newcommand{\tomulti}[1]{\stackrel{#1}{\longrightarrow}}
+%\newcommand*{\prms}[1]{\{\!\{{#1}\}\!\}}
+\newcommand*{\prms}[1]{\{{#1}\}}
+
+% probabilistic extension
+\newcommand*{\Expect}[2]{\mathbb{E}_{#1}(#2)}
+\newcommandx*\tick[3][1=1, 2=1]{{#3}^{\color{extension}\checkmark \ifstrequal{#1#2}{11}{}{\flstp{\tiny#1/#2}}}}
+\newcommand*{\prob}[1]{\lvert {#1} \rvert}
