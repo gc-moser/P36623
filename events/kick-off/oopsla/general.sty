@@ -1,0 +1,614 @@
+\RequirePackage{xargs}
+\RequirePackage{extarrows} %xlongrightarrow
+\RequirePackage{mathtools}%xrightharpoonup{}
+\RequirePackage{slashed}
+\RequirePackage{manfnt}%dbend
+\RequirePackage{stmaryrd}
+\RequirePackage{slashed}%for \subsumes
+\RequirePackage{proof}%Infer
+\RequirePackage{ifthen}
+\RequirePackage{xifthen}
+\RequirePackage{boxedminipage}
+\RequirePackage{xspace}
+\RequirePackage{xparse}
+\RequirePackage{thmtools}
+\RequirePackage{thm-restate}
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% TEXT
+%
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% conditionals
+\newcommand*{\when}[2]{\ifthenelse{#1}{#2}{}}
+\newcommand*{\whenempty}[2]{\when{\equal{#1}{}}{#2}}
+\newcommand*{\unlessempty}[2]{\ifthenelse{\equal{#1}{}}{}{#2}}
+
+% --------------------------------------------------------------------
+% references
+% --------------------------------------------------------------------
+\newcommand*{\eref}[2]{\ref{#1}({\ref{#1:#2}})}
+\newcommand*{\erefs}[3]{\ref{#1}({\ref{#1:#2}}--{\ref{#1:#3}})}
+\newcommand*{\iref}[2]{\ref{#1}.\ref{#1:#2}}
+
+% --------------------------------------------------------------------
+% repeating theorems
+% --------------------------------------------------------------------
+
+% usage:
+% \repeatable{theorem}
+% \begin{theorem}[some label]{th:thm1}
+%   ...
+% \end{theorem}
+% Theorem \ref{th:thm1} is repeated \again{th:thm1}
+
+\newcommand{\repeatable}[1]{
+  \newenvironment{#1*}[2][\unskip]
+  {\expandafter\restatable[##1]{#1}{##2}\label{##2}}
+  {\endrestatable}
+}
+
+\newcommand{\again}[1]{\csname#1\endcsname*}
+
+
+\newcommand{\fl}[1]{\mparbox{3mm}{#1}}
+\newcommand{\cmt}[1]{\text{\quad(\emph{#1})}}
+
+% --------------------------------------------------------------------
+% inference rules
+% --------------------------------------------------------------------
+\newcommand*{\rlname}[3]{\ifthenelse{\equal{#3}{}}{#2}{\ensuremath{#3}}}
+\newcommand*{\rlstyle}[1]{\textcolor{red!70!black}{\textsc{#1}}} %
+\newcommand*{\rldef}[3]{%
+  \hypertarget{#1#2}{\rlname{#1}{#2}{#3}}%
+  \expandafter\gdef\csname #1#2\endcsname{\hyperlink{#1#2}{\rlname{#1}{#2}{#3}}}}
+\newcommand*{\rlref}[2]{\rlstyle{(\csname #1#2\endcsname)}\xspace}
+\newcommand*{\rllabelstyle}[1]{\!\!\scalebox{0.8}{\rlstyle{[#1]}}}
+\newcommandx{\InferDef}[5][1=,2=,3=]{%
+  \infer[\unlessempty{#2#3}{\rllabelstyle{\rldef{#1}{#2}{#3}}}]{#4}{#5}}
+\newcommandx{\InferStar}[4][1=,2=]{%
+  \infer[\unlessempty{#2}{\rllabelstyle{\csname#1#2\endcsname}}]{#3}{#4}}
+\NewDocumentCommand\Infer{s}{\IfBooleanTF#1\InferStar\InferDef}
+\newcommand*{\propty}[2]{#2~\text{\textbf{#1}}}
+
+% --------------------------------------------------------------------
+% structure / typesetting
+% --------------------------------------------------------------------
+
+\newcommand{\mathpar}[1]{\quad \mathsection\ \textit{#1}\ \mathsection}
+\newcommand{\hangeq}[2][5mm]{\mparbox{#1}{#2} & \\}
+\makeatletter
+\newcommand*{\envskipline}{\hfill\@beginparpenalty=10000}
+\newenvironment{enumerateenv}{\hfill\bgroup\@beginparpenalty=10000\begin{enumerate}}{\end{enumerate}\egroup}
+\newenvironment{itemizeenv}{\hfill\bgroup\@beginparpenalty=10000\begin{itemize}}{\end{itemize}\egroup}
+\makeatother
+
+\newcommand{\sidelabel}[1]{\phantom{a}\hfill\textsl{{(#1)}}}
+%
+\newcommand*{\nth}[1]{\ensuremath{\text{#1}^{\text{th}}}}
+\newcommand*{\nst}[1]{\ensuremath{\text{#1}^{\text{st}}}}
+\newcommand*{\nrd}[1]{\ensuremath{\text{#1}^{\text{rd}}}}
+\newcommand*{\nnd}[1]{\ensuremath{\text{#1}^{\text{nd}}}}
+
+\newcommand{\tool}[1]{\texttt{#1}\xspace}
+\newcommand*{\tct}{\tool{T\!\raisebox{-0.5mm}{C}\!T}}
+\newcommand*{\cat}{\tool{C\!\raisebox{-0.1mm}{a}\!T}}
+\newcommand*{\raml}{\tool{RAML}}
+\newcommand*{\haskell}{\tool{Haskell}}
+\newcommand*{\ocaml}{\tool{OCaml}}
+\newcommand*{\pcf}{\tool{PCF}}
+\newcommand*{\hoca}{\tool{HoCA}}
+\newcommand*{\hosa}{\tool{HoSA}}
+\newcommand*{\gubs}{\tool{GUBS}}
+\newcommand*{\aprove}{\tool{AProVE}}
+\newcommand\TTTT{%
+ \tool{T\kern-0.2em\raisebox{-0.3em}T\kern-0.2emT\kern-0.2em\raisebox{-0.3em}2}%
+}
+
+\newcommand*{\deprecate}[1]{{\color{red}{#1}}}
+
+%%% ENVIRONMENTS %%%
+
+\newenvironment{varitemize}
+{
+\begin{list}{\labelitemi}
+{\setlength{\itemsep}{0pt}
+ \setlength{\topsep}{0pt}
+ \setlength{\parsep}{0pt}
+ \setlength{\partopsep}{0pt}
+ \setlength{\leftmargin}{15pt}
+ \setlength{\rightmargin}{0pt}
+ \setlength{\itemindent}{0pt}
+ \setlength{\labelsep}{5pt}
+ \setlength{\labelwidth}{10pt}
+}}
+{
+ \end{list}
+}
+
+\newcounter{numberone}
+
+\newenvironment{varenumerate}
+{
+\begin{list}{\arabic{numberone}.}
+{
+  \usecounter{numberone}
+  \setlength{\itemsep}{0pt}
+  \setlength{\topsep}{0pt}
+  \setlength{\parsep}{0pt}
+  \setlength{\partopsep}{0pt}
+  \setlength{\leftmargin}{15pt}
+  \setlength{\rightmargin}{0pt}
+  \setlength{\itemindent}{0pt}
+  \setlength{\labelsep}{5pt}
+  \setlength{\labelwidth}{15pt}
+}}
+{
+\end{list}
+}
+
+\newcounter{numbertwo}
+
+\newenvironment{varvarenumerate}
+{
+\begin{list}{(\roman{numbertwo})}
+{
+  \usecounter{numbertwo}
+  \setlength{\itemsep}{0pt}
+  \setlength{\topsep}{0pt}
+  \setlength{\parsep}{0pt}
+  \setlength{\partopsep}{0pt}
+  \setlength{\leftmargin}{15pt}
+  \setlength{\rightmargin}{0pt}
+  \setlength{\itemindent}{0pt}
+  \setlength{\labelsep}{5pt}
+  \setlength{\labelwidth}{15pt}
+}}
+{
+\end{list}
+}
+
+\newenvironment{proofcases}
+{
+\begin{list}{\labelitemi}
+{\setlength{\itemsep}{0pt}
+ \setlength{\topsep}{0pt}
+ \setlength{\parsep}{0pt}
+ \setlength{\partopsep}{0pt}
+ \setlength{\leftmargin}{10pt}
+ \setlength{\rightmargin}{0pt}
+ \setlength{\itemindent}{0pt}
+ \setlength{\labelsep}{5pt}
+ \setlength{\labelwidth}{10pt}
+}}
+{
+ \end{list}
+}
+
+\newcommand{\case}[1]{\item[-]\textsc{Case} #1.}
+
+
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% MATH
+%
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% --------------------------------------------------------------------
+% collections
+% --------------------------------------------------------------------
+\newcommandx{\sequence}[4][2=,3=]{%
+  \ifthenelse{\equal{#3}{}}{#4_{1}#1#4_{#2}}{#4_{#2}#1#4_{#3}}}
+\newcommandx{\seq}[3][1=n, 2=]{\sequence{,\dots,}[#1][#2]{#3}}
+\newcommandx{\map}[4][2=n, 3=]{%
+  \ifthenelse{\equal{#3}{}}{#1(#4_{1}),\dots,#1(#4_{#2})}{#1(#4_{#2}),\dots,#1(#4_{#3})}}
+\newcommandx{\mapi}[4][2=n, 3=]{%
+  \ifthenelse{\equal{#3}{}}{#4_{#1(1)},\dots,#4_{#1(#2)}}{#4_{#1(#2)},\dots,#4_{#1(#3)}}}
+\newcommandx{\mapm}[4][2=n, 3=]{%
+  \ifthenelse{\equal{#3}{}}{#1{#4_{1}},\dots,#1{#4_{#2}}}{#1{#4_{#2}},\dots,#1{#4_{#3}}}}
+
+% sets
+\newcommand*{\set}[1]{\{{#1}\}}
+\newcommandx{\sseq}[3][1=n,2=]{\{\seq[#1][#2]{#3}\}}
+% multisets
+\newcommand{\dupsqsh}[1]{% zeichen duplizieren und zusammendruecken
+  {\declareslashed{}{#1}{-0.35}{0}{#1}%
+    {\slashed{#1}}}}
+\newcommand{\mopen}{\dupsqsh{\{}}
+\newcommand{\mclose}{\,\dupsqsh{\}}}
+\newcommand{\mset}[1]{\mopen{#1}\mclose}
+\newcommandx{\mseq}[3][1=,2=]{\mopen\sequence{,\dots,}[#1][#2]{#3}\mclose}
+% tuples
+\newcommand*{\tuple}[1]{\langle #1 \rangle}
+\newcommandx{\tup}[3][1=n, 2=]{\langle\sequence{,\dots,}[#1][#2]{#3}\rangle}
+% lists
+\newcommand{\nil}{[\,]}
+\newcommand{\lst}[1]{[#1]}
+\newcommandx{\lseq}[3][1=n,2=]{[\sequence{,\dots,}[#1][#2]{#3}]}
+
+\newcommand{\seqempty}{\epsilon}
+
+% --------------------------------------------------------------------
+% sructure
+% --------------------------------------------------------------------
+\newcommand*{\defsym}{\triangleq}
+\newcommand*{\defeq}{\defsym}
+\newcommand*{\bnfdef}{\mathrel{::=}}
+\newcommand*{\symdef}{\mathrel{=:}}
+\newcommand*{\defiff}{\mathrel{{:}\!\!{\iff}}}
+\newcommand*{\DEFIFF}{\quad\mathrel{:\IIff}\quad}
+\newcommand*{\eqIH}{\stackrel{\scriptsize\mathsf{IH}}{=}}
+\newcommandx{\mparbox}[3][1=l]{%
+  \text{\makebox[#2][#1]{\ensuremath{#3}}}}
+\newcommand*{\tpkt}{\rlap{$\;$.}}
+\newcommand*{\tkom}{\rlap{$\;$,}}
+\newcommand*{\tspkt}{\rlap{$\;$;}}
+\newcommand{\TOP}{\rule{0pt}{3ex}} % TOP SPACE IN TABLE
+\newcommand*{\BOT}{\rule[-1.8ex]{0pt}{0pt}} % BOTTOM SPACE IN TABLE
+
+% --------------------------------------------------------------------
+% logic
+% --------------------------------------------------------------------
+\newcommand{\imp}{\to}
+\newcommand{\Imp}{\Rightarrow}
+\newcommand{\IImp}{~\Longrightarrow~}
+\newcommand{\Iff}{\Leftrightarrow}
+\newcommand{\IIff}{\Longleftrightarrow}
+
+% --------------------------------------------------------------------
+% numbers etc.
+% --------------------------------------------------------------------
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\B}{\mathbb{B}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\Rpos}{\mathbb{R}^+}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand*{\BOOL}{\mathbb{B}}
+\newcommand*{\btrue}{\top}
+\newcommand*{\bfalse}{\bot}
+
+% --------------------------------------------------------------------
+% misc
+% --------------------------------------------------------------------
+
+\newcommand{\category}[1]{\text{(#1)}}
+
+\newcommandx{\concatenate}[3][1={,}]{\ifx\\#2\\#3\else\ifx\\#3\\#2\else{#2}{#1}{#3}\fi\fi}
+
+\newcommand{\powerset}[1]{\operatorname{\mathfrak{P}}(#1)}
+\newcommand{\complmnt}[1]{\overline{#1}}
+% \newcommand{\powerset}[1]{\raisebox{.15\baselineskip}{\Large\ensuremath{\wp}}(#1)}
+% \newcommand{\powerset}[1]{\wp(#1)}
+\newcommand{\fclosure}[2]{{#2}(#1)} % forward closure
+\newcommand{\compose}{\circ}
+\newcommand{\quotient}[2][\approx]{#2\slash_{#1}}
+\newcommand{\eclass}[2][\approx]{[#2]_{#1}}
+%
+\newcommand{\keq}{=_{\m{k}}} % kleene equality
+\newcommand{\kgeq}{\geqslant_{\m{k}}}
+%
+\newcommand{\ofdom}{\colon}
+\DeclareMathOperator{\dom}{\mathsf{dom}}
+%
+\newcommand{\roundabove}[1]{\lceil {#1} \rceil}
+\newcommand{\roundbelow}[1]{\lfloor {#1} \rfloor}
+
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% REWRITING
+%
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% -------------------------------------------------------------------
+% sets
+% -------------------------------------------------------------------
+% signature
+\newcommand*{\FS}{\mathcal{F}}
+\newcommand*{\VS}{\mathcal{V}}
+\newcommand*{\CS}{\mathcal{C}}
+\newcommand*{\DS}{\mathcal{D}}
+\DeclareMathOperator{\NF}{\mathsf{NF}}
+
+%positions
+\DeclareMathOperator{\Possym}{\mathcal{P}os}
+\newcommand{\Pos}[1][]{\Possym_{#1}}
+\newcommand{\posone}{p}
+\newcommand{\postwo}{q}
+\newcommand{\posempty}{\epsilon}
+\newcommand{\posc}{{\cdot}}
+\newcommand{\pospar}{\mathrel{||}}
+\newcommandx{\posseq}[3][1=n, 2=1]{#3_{#2}\posc\,\cdots\,\posc#3_{#1}}
+% terms
+\newcommand{\TA}{\mathcal{T}}
+\newcommand{\Tb}{\mathcal{T}_{\!\mathsf{b}}}
+\newcommandx{\BTERMS}[3][1=\DS,2=\CS,3=\Tb]{#3(#1\uplus#2)}
+\newcommandx{\TERMS}[3][1=,2=,3=]{\TA(#1\ifx\\#2\\\else,#2\fi\ifx\\#3\\\else,#3\fi)}
+\newcommandx{\GTERMS}[1][1=\FS]{\TA(#1)}
+\newcommandx{\CTERMS}[2][1=\CS,2=\VS]{\TERMS[#1][#2]}
+\newcommandx{\Val}[1][1=\CS]{\TA(#1)}
+
+% -------------------------------------------------------------------
+% symbols
+% --------------------------------------------------------------------
+% defined symbols
+\newcommand{\sym}[1]{\text{\ttfamily\itshape{#1}}}
+\newcommand*{\symone}{\sym{f}}
+\newcommand*{\symtwo}{\sym{g}}
+\newcommand*{\symthree}{\sym{h}}
+% function symbols
+\newcommand{\fun}[1]{\mathtt{#1}}
+\newcommand*{\funone}{\fun{f}}
+\newcommand*{\funtwo}{\fun{g}}
+\newcommand*{\funthree}{\fun{h}}
+% constructors
+\newcommand{\con}[1]{\mathtt{#1}}
+\newcommand{\conone}{\con{C}}
+\newcommand{\contwo}{\con{D}}
+\newcommand{\conthree}{\con{E}}
+% variables
+% \newcommand{\var}[1]{\mathit{#1}}
+% \newcommand*{\varone}{\var{x}}
+% \newcommand*{\vartwo}{\var{y}}
+% \newcommand*{\varthree}{\var{z}}
+% \newcommand*{\varfour}{\var{s}}
+% \newcommand*{\varfive}{\var{t}}
+
+% -------------------------------------------------------------------
+% terms
+% --------------------------------------------------------------------
+\newcommand{\termone}{t}
+\newcommand{\termtwo}{s}
+\newcommand{\valone}{v}
+\newcommand{\valtwo}{u}
+\newcommand{\dataone}{d}
+
+% contexts
+\newcommandx{\ctx}[3][1=,3=]{#2[#3]_{#1}}
+\newcommandx{\ctxone}{C}
+\newcommand*{\hole}{\Box}
+% operations
+\DeclareMathOperator{\rt}{\mathsf{rt}}
+\DeclareMathOperator{\width}{\mathsf{wd}}
+\DeclareMathOperator{\depth}{\mathsf{dp}}
+\DeclareMathOperator{\ARITY}{\mathsf{ar}}
+\newcommand*{\arity}[1]{\ARITY_{#1}}
+\newcommand*{\withar}[2]{{#1}/#2}
+\newcommand*{\size}[2][]{\lvert{#2}\rvert_{#1}}
+\newcommand*{\subtermAt}[2]{#1|_{#2}}
+\renewcommand*{\Var}[1]{\mathsf{Var}(#1)}
+\newcommand*{\Fun}[1]{\mathsf{Fun}(#1)}
+% relations
+\newcommand*{\superterm}{\mathrel{\unrhd}}
+\newcommand*{\supertermstrict}{\mathrel{\rhd}}
+\newcommand*{\subterm}{\mathrel{\unlhd}}
+\newcommand*{\subtermstrict}{\mathrel{\lhd}}
+\newcommand*{\subsumes}{\declareslashed{}{\cdot}{0.18}{0.22}{\leqslant}\mathrel{\slashed{\leqslant}}}
+\newcommand*{\matches}{\declareslashed{}{\cdot}{-0.15}{0.22}{\geqslant}\mathrel{\slashed{\geqslant}}}
+
+% substitutions
+\newcommand*{\substone}{\theta}
+\newcommand*{\substid}{\substone_{\mathsf{id}}}
+% \newcommand*{\substby}[2]{#2/#1}
+\newcommand*{\substby}[2]{#2 \mathrel{:=} #1}
+\newcommand*{\subst}[2]{[\substby{#1}{#2}]}
+\newcommand*{\substseq}[3][n]{[\substby{#2_1}{#3_1},\dots,\substby{#2_#1}{#3_#1}]}
+\newcommand*{\substvec}[2]{\subst{\vec{#1}}{\vec{#2}}}
+
+% --------------------------------------------------------------------
+% sorts
+% --------------------------------------------------------------------
+\newcommand*{\Sorts}{\mathcal{S}}
+\newcommand*{\sorts}[1]{(#1)}
+\newcommandx{\sortsseq}[3][1=n,2=]{\sorts{\sequence{\times \cdots \times}[#1][#2]{#3}}}
+\newcommand*{\sdecl}[2]{\ifx\\#1\\#2\else#1 \to #2\fi}
+\newcommand*{\ofsort}[3]{#1\,{:}\,\sdecl{#2}{#3}}
+\newcommand*{\sortjdgmt}[2]{#1\,{:}\,#2}
+\DeclareMathOperator{\sortof}{\mathsf{sort}}
+\newcommand*{\sortone}{\alpha}
+\newcommand*{\sorttwo}{\beta}
+\newcommand*{\sortthree}{\gamma}
+\newcommand*{\VSsort}[1]{\VS_{#1}}
+
+% --------------------------------------------------------------------
+% ML types
+% --------------------------------------------------------------------
+\newcommand{\tyvarone}{\alpha}
+\newcommand{\tyvartwo}{\beta}
+\newcommand{\tyvarthree}{\gamma}
+% --------------------------------------------------------------------
+% TRSs
+% --------------------------------------------------------------------
+\newcommand*{\TRSone}{\mathcal{R}}
+\newcommand*{\TRStwo}{\mathcal{S}}
+\newcommand*{\QS}{\mathcal{Q}}
+% runtime/derivational complexity
+\DeclareMathOperator{\dheight}{dh}
+\DeclareMathOperator{\rcsym}{rc}
+\DeclareMathOperator{\rlsym}{rl}
+\DeclareMathOperator{\dcsym}{dc}
+\DeclareMathOperator{\dcisym}{dci}
+\DeclareMathOperator{\rcisym}{rci}
+\newcommand{\dc}[1][\TRSone]{\dcsym_{#1}}
+\newcommand{\redlen}[1][\TRSone]{\rlsym_{#1}}
+\newcommand{\rc}[1][\TRSone]{\rcsym_{#1}}
+\newcommand{\rci}[1][\TRSone]{\rcisym_{#1}}
+\newcommand{\dci}[1][\TRSone]{\dcisym_{#1}}
+% semantics
+\newcommandx{\sem}[3][1=\TRSone,2=]{\llbracket #3 \rrbracket_{#1\ifx\\#2\\\else,\fi#2}}
+
+% --------------------------------------------------------------------
+% Rewrite relations
+% --------------------------------------------------------------------
+\newcommand*{\rewrite}[3]{%
+  \mathrel{%
+    \xrightarrow{\raisebox{-2pt}[0pt][0pt]{\text{\scriptsize\ensuremath{#1}}}}^{#2}_{#3}}}
+\newcommand*{\etiwer}[3]{%
+  \mathrel{%
+    {}^{#2}_{#3}\!\!\xleftarrow{\raisebox{-2pt}[0pt][0pt]{\text{\scriptsize\ensuremath{#1}}}}}}
+% full rewriting
+\newcommand*{\rew}[1][]{\rewrite{}{}{#1}}
+\newcommand*{\rss}[1][]{\rewrite{}{\ast}{#1}}
+\newcommand*{\rst}[1][]{\rewrite{}{+}{#1}}
+\newcommand*{\rsl}[2][]{\rewrite{}{#2}{#1}}
+\newcommand*{\rsn}[1][]{\rewrite{}{!}{#1}}
+\newcommand*{\rewpos}[2][]{\rewrite{}{#2}{#1}}
+% reverse relations
+\newcommand*{\wer}[1][]{\etiwer{}{}{#1}}
+\newcommand*{\ssr}[1][]{\etiwer{}{\ast}{#1}}
+% innermost rewriting
+\DeclareMathOperator{\innermost}{\mathsf{i}}
+\newcommand*{\irew}[1][]{\rewrite{\innermost}{}{#1}}
+\newcommand*{\irss}[1][]{\rewrite{\innermost}{\ast}{#1}}
+\newcommand*{\irst}[1][]{\rewrite{\innermost}{+}{#1}}
+\newcommand*{\irsl}[2][]{\rewrite{\innermost}{#2}{#1}}
+\newcommand*{\irsn}[1][]{\rewrite{\innermost}{!}{#1}}
+\newcommand*{\irewpos}[2][]{\rewrite{\innermost}{#2}{#1}}
+% call by value
+\DeclareMathOperator{\cbv}{\mathsf{cbv}}
+\newcommand*{\cbvrew}[1][]{\rewrite{\cbv}{}{#1}}
+\newcommand*{\cbvrss}[1][]{\rewrite{\cbv}{\ast}{#1}}
+\newcommand*{\cbvrst}[1][]{\rewrite{\cbv}{+}{#1}}
+\newcommand*{\cbvrsn}[1][]{\rewrite{\cbv}{!}{#1}}
+% q-restricted rewriting/misc
+\newcommand{\relative}[2]{#1{\slash}#2}
+\newcommandx{\qrew}[2][1=\QS,2=]{\rewrite{#1}{}{#2}}
+\newcommandx{\qrsl}[3][1=\QS,2=]{\rewrite{#1}{#3}{#2}}
+\newcommandx{\qrss}[2][1=\QS,2=]{\rewrite{#1}{\ast}{#2}}
+\newcommandx{\qreq}[2][1=\QS,2=]{\rewrite{#1}{=}{#2}}
+\newcommandx{\qrrew}[3][1=\QS]{\rewrite{#1}{}{\relative{#2}{#3}}}
+\newcommandx{\qrrsl}[4][1=\QS]{\rewrite{#1}{#4}{\relative{#2}{#3}}}
+\newcommandx{\qrrss}[3][1=\QS]{\rewrite{#1}{\ast}{\relative{#2}{#3}}}
+% context-sensitive rewriting
+\newcommandx{\crew}[2][1=,2=\mu]{\rewrite{#2}{}{#1}}
+\newcommandx{\crss}[2][1=,2=\mu]{\rewrite{#2}{\ast}{#1}}
+
+
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% GRAPH REWRITING
+%
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+\newcommand*{\graphone}{G}
+\newcommand*{\graphtwo}{H}
+% components
+\newcommand{\nodes}[1][]{N_{#1}}
+\newcommand{\lab}[1][]{\mathsf{lab}_{#1}}
+\newcommandx{\suc}[2][1=,2=]{\mathsf{suc}_{#1}^{#2}}
+% operations
+\newcommand*{\graphUnion}{\oplus}
+\newcommand*{\subgraphAt}[2]{#1 {\downharpoonright} #2} %\restriction
+\newcommand*{\trim}[1]{#1{\downharpoonright}}
+\newcommand{\replaceAt}[3]{{#1}\langle{#3}\rangle_{#2}}
+\newcommand{\replaceNode}[3]{{#1{[{#2} \leftarrow {#3}]}}}
+\newcommand{\removeNode}[2]{#1 \setminus #2}
+% nodes
+\newcommand*{\suci}[2][]{\xrightharpoonup{\scriptsize{\ensuremath{#2}}}_{#1}}
+\newcommand*{\reach}[1][]{\rightharpoonup_{#1}}
+\newcommand*{\reachtr}[1][]{\rightharpoonup_{#1}^{\ast}}
+\newcommand*{\reachtir}[1][]{\rightharpoonup_{#1}^{+}}
+%
+\newcommand{\nodepar}[1][]{\mathrel{||}_{#1}}
+\newcommand{\nodeleq}[1][]{\leqslant_{#1}}
+\newcommand{\nodele}[1][]{<_{#1}}
+\newcommand{\nodegeq}[1][]{\geqslant_{#1}}
+\newcommand{\nodege}[1][]{>_{#1}}
+% rules
+\newcommand*{\gruleone}{Rl}
+\DeclareMathOperator{\glhs}{\mathsf{lhs}}
+\DeclareMathOperator{\grhs}{\mathsf{rhs}}
+
+
+% -------------------------------------------------------------------
+% sets
+% -------------------------------------------------------------------
+\newcommand{\NODES}{\mathcal{N}}
+\newcommand{\nodeone}{o}
+\newcommand{\nodetwo}{p}
+\newcommandx{\GGRAPHS}[2][1=\FS,2=]{{\mathcal{G}_{\text{\tiny{\ensuremath{#2}}}}}(#1)}
+\newcommand*{\GRAPHS}[1][]{\mathcal{G_{\text{\tiny{$#1$}}}}(\FS,\VS)}
+% \DeclareMathOperator{\Trees}{{\vartriangle}}
+% \DeclareMathOperator{\CShared}{{\triangledown}}
+% \DeclareMathOperator{\TShared}{{\diamondsuit}}
+
+% --------------------------------------------------------------------
+% term graphs
+% --------------------------------------------------------------------
+\newcommand*{\tgraphone}{T}
+\newcommand*{\tgraphtwo}{S}
+\newcommand{\tree}[1]{\triangle(#1)}
+%
+\newcommand*{\access}[1][]{a_{#1}}
+% operations
+\DeclareMathOperator{\TREPR}{\mathsf{term}}
+% \newcommand{\trepr}[2][]{\ifx\\#1\\[#2]\else[\subgraphAt{#1}{#2}]\fi}
+\newcommand{\trepr}[2][]{[#2]_{#1}}
+% morphism
+\newcommand*{\morphone}{m}
+\newcommand*{\morphtwo}{n}
+\newcommand{\isomorph}[1][]{\cong^{#1}}
+\newcommand{\morph}[4][]{#2\,\colon\,{#3 \to_{#1} #4}}
+\newcommand{\mmatch}[3]{#2 \matches_{#1} #3}
+\newcommand{\emorph}[1]{\underline{#1}}
+\newcommandx{\morphgt}[1][1=]{\succ_{#1}}
+\newcommandx{\morphgeq}[1][1=]{\succcurlyeq_{#1}}
+\newcommandx{\morphlt}[1][1=]{\prec_{#1}}
+\newcommandx{\morphleq}[1][1=]{\preccurlyeq_{#1}}
+\newcommand{\mgt}[3]{#2 \morphgeq[#1] #3}
+
+% --------------------------------------------------------------------
+% GRSs
+% --------------------------------------------------------------------
+\newcommand*{\GRSone}{\mathcal{G}}
+% --------------------------------------------------------------------
+% Rewrite relations
+% --------------------------------------------------------------------
+\newcommand*{\gredex}[3]{\langle#1,#2,#3\rangle}
+\newcommand*{\PREWRITE}[4][]{\xlongrightarrow{\text{\raisebox{-2pt}[0pt][0pt]{\tiny\ensuremath{#1}}}}_{\gredex{#2}{#3}{#4}}}
+\newcommand*{\REWRITE}[3]{\xRightarrow{\text{\raisebox{-2pt}[0pt][0pt]{\tiny\ensuremath{#1}}}}^{#2}_{#3}}
+\newcommand*{\ETIWER}[3]{\mathrel{{}^{~#2}_{#3}\!\!\xLeftarrow{\text{\raisebox{-2pt}[0pt][0pt]{\tiny\ensuremath{#1}}}}}}
+% full rewriting
+\newcommand*{\WER}[1][]{\ETIWER{}{}{#1}}
+\newcommand*{\REW}[1][]{\REWRITE{}{}{#1}}
+\newcommand*{\RSS}[1][]{\REWRITE{}{\ast}{#1}}
+\newcommand*{\RST}[1][]{\REWRITE{}{+}{#1}}
+\newcommand*{\RSL}[2][]{\REWRITE{}{#2}{#1}}
+\newcommand*{\RSN}[1][]{\REWRITE{}{!}{#1}}
+\newcommand*{\REWPOS}[2][]{\REWRITE{}{#2}{#1}}
+% call by value
+\newcommand*{\CBVREW}[1][]{\REWRITE{\cbv}{}{#1}}
+\newcommand*{\CBVRSS}[1][]{\REWRITE{\cbv}{\ast}{#1}}
+\newcommand*{\CBVRST}[1][]{\REWRITE{\cbv}{+}{#1}}
+\newcommand*{\CBVRSL}[2][]{\REWRITE{\cbv}{#2}{#1}}
+\newcommand*{\CBVRSN}[1][]{\REWRITE{\cbv}{!}{#1}}
+\newcommand*{\CBVREWPOS}[2][]{\REWRITE{\cbv}{#2}{#1}}
+
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% interpretations
+%
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\newcommandx{\interpret}[3][1=\AS,2=\alpha]{\llbracket #3\rrbracket_{#1}^{#2}}
+\newcommandx{\interpretation}[2][1=\AS]{\llbracket#2\rrbracket_{#1}}
+% \newcommand{\interpretation}[2][1=\AS]{#2_{#1}}
+
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% COMPLEXITY
+%
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% --------------------------------------------------------------------
+% classes
+% --------------------------------------------------------------------
+\newcommand*{\CC}[1]{\textsc{#1}}
+\newcommand*{\PTIME}{\CC{PTime}}
+\newcommand*{\NC}{\CC{NC}}
+\newcommand*{\PH}{\CC{PH}}
+\newcommand*{\PSPACE}{\CC{PSpace}}
+\newcommand*{\EXPTIME}{\CC{ExpTime}}
+\newcommand*{\bO}{\mathsf{O}}

@@ -1,0 +1,103 @@
+\RequirePackage{xspace}
+\RequirePackage{xparse}
+\RequirePackage{stackengine}
+
+\newcommand\Real{\R}
+\newcommand\Realpos{\Real_{\ge 0}}
+\newcommand\Realnonneg{\Real_{\ge 0}}
+% \newcommand\Realposinf{\overline{\Real}}
+\newcommand\Realposinf{\Real_{\ge 0}^{\infty}}
+\newcommand\Costs{\mathbb{C}}
+
+% weighted ARSs
+\newcommand\AT[1]{^{\langle#1\rangle}}
+\newcommand\pot[2][]{\mathsf{pot}_{#1}(#2)}
+\newcommand\poval[2][]{\mathsf{pot}_{#1}(#2)}
+\newcommand\wars[1]{\mathrel{\mathring#1}}
+\newcommand\SB{\mathsf{SB}}
+
+\newcommand{\Dist}[1]{\mathcal{D}(#1)}
+\newcommand{\FDist}[1]{\mathsf{FDist}(#1)}
+\newcommand{\FMDist}[1]{\mathsf{FMDist}(#1)}
+\newcommand{\MDist}[1]{\mathcal{M}(#1)}
+\newcommand{\Supp}[1]{\mathsf{Supp}(#1)}
+
+\newcommand{\mdist}{\mu}
+\newcommand{\mdisttwo}{\nu}
+
+\newcommand{\pr}[2]{#1 \mathbin{:} #2}
+
+%multisets/multidistributions
+\def\tp@#1#2{\@ifnextchar[{\tp@@{#1}{#2}}{\tp@@@{#1}{#2}}}
+\def\tp@@#1#2[#3]#4{#3#1\def\mid{\mathrel{#3|}}#4#3#2}
+\def\tp@@@#1#2#3{\bgroup\left#1\def\mid{\;\middle|\;}#3\right#2\egroup}
+\def\pa{\tp@()}
+\def\tp{\pa}
+\def\set{\tp@\{\}}
+\def\sz{\tp@||}
+\def\mopen{\{\hspace{-3pt}\{}
+\def\mclose{\}\hspace{-3pt}\}}
+
+\def\tp@dbl#1#2#3#4{\@ifnextchar[{\tp@dbl@{#1}{#2}{#3}{#4}}{\tp@dbl@@{#1}{#2}{#3}{#4}}}
+\def\tp@dbl@#1#2#3#4[#5]#6{#5#1#5#2\def\mid{\mathrel{#5|}}#6#5#3#5#4}
+\def\tp@dbl@@#1#2#3#4#5{\bgroup\left#1\middle#2\def\mid{\;\middle|\;}#5\middle#3\right#4\egroup}
+\def\mset{\tp@dbl{\{\hspace{-3pt}}{\{}{\}\hspace{-3pt}}{\}}}
+\newcommand{\msetempty}{\varnothing}
+
+\def\@prs{\@ifnextchar @{\@@@prs}{,\mathrel{}\@@prs}}
+\def\@@prs#1:#2;{\pr{#1}{#2}\@prs}
+\def\@@@prs @{}
+\def\prs#1{\{\@@prs#1;@\}}
+\def\prms#1{\mset{\@@prs#1;@}}
+
+
+% reductions
+% \newcommand\dhxrightarrow[2][]{%
+%   \mathrel{\ooalign{$\xrightarrow[#1\mkern7mu]{#2}$\cr%
+%   \hidewidth$\rightarrow\mkern4mu$}}
+% }
+
+% \stackMath
+% \newcommand\xxrightarrow[2][]{\mathrel{%
+%   \setbox2=\hbox{\stackon{\scriptstyle#1}{\scriptstyle#2}}%
+%   \stackunder[0pt]{%
+%     \xrightarrow{\makebox[\dimexpr\wd2\relax]{\raisebox{-1.5ex}{$\scriptstyle#2$}}}%
+%   }{%
+%    \scriptstyle#1\,%
+%   }%
+% }}
+
+% \newcommand\dhxxrightarrow[2][]{%
+%   \mathrel{\ooalign{$\xxrightarrow[#1\mkern7mu]{#2\mkern7mu}$\cr%
+%   \hidewidth$\rightarrow\mkern4mu$}}
+% }
+
+\newcommand\xxrightarrow[2][]{
+  \mathrel{\strut\smash{\xrightarrow%
+  [\smash{\raisebox{1pt}{$\scriptstyle{\mathbf{#1}}$}}]%
+  {\smash{\raisebox{-2pt}{$\scriptstyle{#2}$}}}}}}
+
+\newcommand{\dhxxrightarrow}[2][]{%
+  \xxrightarrow[#1]{#2}\mathrel{\mkern-15mu}\rightarrow}
+
+\newcommand\Seq[1][{\pto}]{\mathsf{red}(#1)}
+
+\DeclareDocumentCommand{\pto}{D<>{} O{}}{\xxrightarrow[#2]{#1}}
+\DeclareDocumentCommand{\pTO}{D<>{} O{}}{\mathrel{\dhxxrightarrow[#2]{#1}}}
+\DeclareDocumentCommand{\pTOO}{D<>{} O{}}{\mathrel{\dhxxrightarrow[#2]{#1}\negthickspace^{*}}}
+\newcommand\restrict[2]{{#1{\downharpoonright}#2}}
+
+\renewcommand\E[2]{\mathbb{E}_{#1}(#2)}
+% \newcommand\E[2]{\mathbb{E}(\unlessempty{#2}{#2(}#1\unlessempty{#2}{)})}
+
+% \newcommand\ecost[1]{\mathsf{ecost}_{#1}}
+% \newcommand\evalue[1]{\mathsf{evalue}_{#1}}
+
+
+\newcommand\ectp[1][\to]{\mathsf{ect}[{#1}]}
+\newcommand\ecost[1][\to]{\mathsf{ecost}[{#1}]}
+\newcommand\evalue[1][\to]{\mathsf{evalue}[{#1}]}
+\newcommand{\ectpd}[2][\to]{\chi_{#2}}
+
+\newcommand\Term[1]{\mathsf{Term}(#1)}
+\newcommand\isTerm[1]{#1{\downarrow}}

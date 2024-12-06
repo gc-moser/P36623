@@ -1,0 +1,72 @@
+\RequirePackage{tikz}
+\usetikzlibrary{backgrounds}
+\usetikzlibrary{fit}
+\usetikzlibrary{fadings}
+
+\newcommandx{\ibox}[7][1=ibox,2=black]{
+  \def\esel{#4*0.15}
+  \coordinate (#1 center) at #3 {};
+  \coordinate (#1 east) at ($#3 + (0.5*#4,0)$) {};
+  \coordinate (#1 north) at ($#3 + (0,0.5*#5)$) {};
+  \coordinate (#1 south) at ($#3 + (0,-0.5*#5)$) {};
+  \coordinate (#1 west) at ($#3 + (-0.5*#4,0)$) {};
+  \coordinate (#1 northwest) at ($#3 + (-0.5*#4,0.5*#5)$) {};
+  \coordinate (#1 northeast) at ($#3 + (0.5*#4,0.5*#5)$) {};
+  \coordinate (#1 southwest) at ($#3 + (-0.5*#4,-0.5*#5)$) {};
+  \coordinate (#1 southeast) at ($#3 + (0.5*#4,-0.5*#5)$) {};
+
+
+  \draw[draw=#2,thick,fill=white]
+        (#1 northwest)
+        -- ($(#1 northeast)+(-\esel,0)$)
+        -- ($(#1 northeast)+(0,-\esel)$)
+        -- (#1 southeast)
+        -- (#1 southwest)
+        -- (#1 northwest);
+  \draw[draw=#2,thick,fill=#2!10]
+        ($(#1 northeast)+(-\esel,0)$)
+        -- ($(#1 northeast)+(-\esel,-\esel)$)
+        -- ($(#1 northeast)+(0,-\esel)$)
+        -- ($(#1 northeast)+(-\esel,0)$);
+
+  \node[anchor=north west,inner sep=2pt, txtlabel] (#1 text) at (#1 northwest) {\scriptsize\textsf{#7}};
+  \node[anchor=south east,text=#2,fill opacity=0.15,scale=3,inner sep=0.1pt] at (#1 southeast) {#6};
+}
+
+\tikzfading[name=fade right, left color=transparent!30, right color=transparent!80]
+\tikzfading[name=no fade, left color=transparent!0, right color=transparent!0]
+\tikzfading[name=fade, left color=transparent!30, right color=transparent!30]
+\tikzstyle{box} = [shape=rectangle, rounded corners, draw, fill=white, minimum width=3cm, minimum height=1cm]
+\tikzstyle{input} = [shape=rectangle, rounded corners, draw, dotted,inner sep=3pt]
+\tikzstyle{txtlabel} = []
+\tikzstyle{arr} = [->,thick]
+\tikzstyle{arr2} = [->,line width=1.5pt]
+
+\newcommand{\tctschematic}{
+
+      \ibox[input][structure.fg]{(0,0)}{4.1}{3}{.trs}{
+        \begin{minipage}{\linewidth}
+            \DGRAY{
+              \vspace{1mm}
+              \tiny
+              $\fun{mergesort}(\nil) = \nil$\\
+              $\fun{mergesort}([\var{x}]) = [\var{x}]$ \\
+              $\fun{mergesort}(\var{x}:\var{y}:\var{ys}) =$ \\
+              \phantom{Xl}$\fun{mergesort}'(\fun{split}(\var{x}:\var{y}:\var{ys}))$\\
+              $\fun{mergesort}'((\var{xs},\var{ys})) = {}$ \\
+              \phantom{Xl}$\fun{merge}(\fun{mergesort}(\var{xs}),\fun{mergesort}(\var{ys}))$ \\
+              $\fun{merge}(\nil,\var{ys}) = \var{ys}{}$ \\
+              $\fun{merge}(\var{x}:\var{xs},\nil) = \var{x}:\var{xs}$ \\
+            }
+        \end{minipage}
+      };
+
+    \node[anchor=west,box,minimum width=3.5cm,minimum height=3.5cm,xshift=0.9cm,anchor=west,fill=structure.fg,draw=structure.bg,text=white, align=center] (tct) at (input east) {\Huge$\color{white}{\tct}$};
+    \node[xshift=0.9cm,yshift=0.75cm,anchor=west, text width=2.5cm] (yes) at (tct.east) {runtime $\bigO(n^k)$};
+
+    \node[xshift=0.9cm,yshift=-0.75cm,anchor=west, text width=2.5cm] (no) at (tct.east) {\textsf{don't know}};
+
+    \draw[arr,draw=structure.fg] (input east) -- (tct.west);
+    \draw[arr,draw=structure.fg] (tct.east) -- +(0.45cm,0) |- (yes);
+    \draw[arr,draw=structure.fg] (tct.east) -- +(0.45cm,0) |- (no);
+}

@@ -1,0 +1,149 @@
+\newcommand\bmmax{1}
+% \RequirePackage{bbm}
+\RequirePackage{bm}
+
+\newcommand\Absynth{\texttt{Absynth}\xspace}%MA: does the trick
+\renewcommand*\Prob{\mathcal{P}}
+% expressions
+\newcommand*\Exp{\mathsf{Exp}}
+\newcommand*\const[1]{\text{\texttt{#1}}}
+\renewcommand*\Var{\mathsf{Var}}
+\renewcommand*\Fun{\mathsf{Op}}
+\newcommand*\var{x}
+\newcommand*\vartwo{y}
+\newcommand*\varthree{z}
+\newcommand*\val{v}
+\renewcommand*\valtwo{u}
+\renewcommand*\exp{e}
+\newcommand*\exptwo{f}
+\newcommand*\expthree{g}
+% \renewcommand*\fun{\mathtt{f}}
+% \renewcommand*\funtwo{\mathtt{g}}
+\newcommand*{\plus}{\mathrel{\text{\texttt{+}}}}
+
+% boolean expressions
+\newcommand*\BExp{\mathsf{BExp}}
+\newcommand*\bexp{\phi}
+\newcommand*\bexptwo{\psi}
+
+% distributions
+\newcommand*\DExp{\mathsf{DExp}}
+\newcommand{\half}{\frac{1}{2}}
+\newcommand\expd{d}
+\newcommand\expdtwo{e}
+
+% programs
+\newcommand*\lang{\textsc{pWhile}}
+\newcommand*\Cmd{\mathsf{Cmd}}
+\newcommand*\cmd[1][]{{\mathtt{C}_{\mathsf{#1}}}}
+\newcommand*\cmdtwo{\mathtt{D}}
+\newcommand*\cmdthree{\mathtt{E}}
+%
+\newcommand*\cblock[1]{\{#1\}}
+\newcommand*\cpar[1]{(#1)}
+% \newcommand*\cblock[1]{\text{\pwhile!\{!}#1\text{\pwhile!\}!}}
+% \newcommand*\cpar[1]{\text{\pwhile!(!}#1\text{\pwhile!)!}}
+\newcommand*\skipc{\mathtt{skip}}
+\newcommand*\haltc{\mathtt{abort}}
+\newcommand*\assertc[1]{\mathtt{assert}\cpar{#1}}
+\newcommand*\assumec[1]{\mathtt{assume}\cpar{#1}}
+% \newcommand*\passign{\mathrel{\text{\texttt{:=}}}}
+\newcommand*\passign{\coloneqq}
+\newcommand*\ndci{\mathrel{\text{\texttt{<>}}}}
+\newcommand*\ndc[2]{\cblock{#1}\ndci\cblock{#2}}
+\newcommand*\pci[1]{\text{\texttt{[$#1$]}}}
+\newcommand*\pc[3]{\cblock{#2}\pci{#1}\cblock{#3}}
+\newcommand*\ifc[3]{\mathtt{if}\ \cpar{#1}\ \cblock{#2}\ \cblock{#3}}
+\newcommand*\whenc[2]{\mathtt{if}\ \cpar{#1}\ \cblock{#2}}
+\newcommand*\tickc[1]{\mathtt{consume}\cpar{#1}}
+\newcommand*\whilec[2]{\mathtt{while}\ \cpar{#1}\ \cblock{#2}}
+
+\newcommand*\cf[1]{\mathsf{costFree}(#1)}
+
+% semantics
+\newcommand\whilePARS[1][]{\pto<{#1}>[pGCL]}
+\newcommand\whileSTEP[1][]{\pTO<{#1}>[pGCL]}
+\newcommand\whileSEQ[1][]{\pTOO<{#1}>[pGCL]}
+\newcommand\Conf{\mathsf{Conf}}
+\newcommand\Store{\Sigma}
+\newcommand\st{\sigma}
+\newcommand\sttwo{\tau}
+\newcommand\aborted{\bot}
+\newcommand\cfg[2]{\DBLUE{#2} \triangleright \DGREEN{#1}}
+% \newcommand\cfg[2]{\langle #1 \rangle(#2)}
+\newcommand\conf{\gamma}
+\newcommand{\Trm}{\mathsf{NF}}
+
+\newcommand{\upd}[3]{#1 [\substby{#3}{#2}]}
+\newcommand{\fmap}[1]{#1^*}
+\newcommand\evexp[1]{\sem[\mathcal{E}]{#1}}
+\newcommand\evdist[1]{\sem[\mathcal{D}]{#1}}
+\newcommand\entails{\vDash}
+\newcommand\notentails{\nvDash}
+\newcommand*\evstep[1]{\mathsf{step}_#1}
+
+% expectations
+\newcommand\ec[1]{\mathsf{ecost}[#1]}
+\newcommand\er[1]{\mathsf{eruntime}[#1]}
+\newcommand\ev[1]{\mathsf{evalue}[#1]}
+
+% \newcommand{\bm}[1]{\mathbbb{#1}}
+% expectation functions
+\newcommand\lfp[1]{\mathsf{lfp}(#1)}
+\newcommand\brac[1]{[#1]}
+\newcommand\Expect[1][\States]{\mathbb{C}^{#1}}
+\newcommand\bracf[1]{\bm{[}#1\bm{]}}
+%\newcommand\geqf{\succeq}
+%\newcommand\leqf{\preceq}
+%GM: consistency with boldface notation
+\newcommand\geqf{\mathrel{\bm{\geq}}}
+\newcommand\gef{\mathrel{\bm{\ge}}}
+\newcommand\leqf{\mathrel{\bm{\leq}}}
+\newcommand\eqf{\mathrel{\bm{=}}}
+\newcommand\neqf{\mathrel{\bm{\neq}}}
+\newcommand\zerof{\mathbf{0}}
+\newcommand\onef{\bm{1}}
+\newcommand\twof{\bm{2}}
+\newcommand\threef{\bm{3}}
+\newcommand\fourf{\bm{4}}
+\newcommand\inftyf{\bm{\infty}}
+\newcommand\constf[1]{\mathbf{#1}}
+\newcommand\plusf{\bm{+}}
+\newcommand\timesf{\star}
+\newcommand\divf{\bm{/}}
+\newcommand\mulf{\bm{\cdot}}
+\newcommand\minusf{\bm{-}}
+\newcommand\normf[1]{\bm{\langle} #1 \bm{\rangle}}
+\newcommand\maxf{\mathbf{max}}
+\newcommand\minf{\mathbf{min}}
+\newcommand\sumf{\mathbf{\sum}}
+\newcommand\supf{\mathbf{\sup}}
+%\newcommand\Ef[2]{\varmathbb{E}(\unlessempty{#2}{#2(}#1\unlessempty{#2}{)})}
+\newcommand\Ef[2]{\mathbb{E}(\unlessempty{#2}{#2(}#1\unlessempty{#2}{)})}
+
+% \newcommand{\ce}[3]{\chi^{\langle#1,#2\rangle}_{#3}}
+\newcommand{\ce}[3]{\chi}
+\newcommand{\cev}[3]{\eta^{\langle#1,#2\rangle}_{#3}}
+\newcommand{\cecost}[3]{\hat{\chi}^{\langle#1,#2\rangle}_{#3}}
+\newcommand{\ceval}[3]{\hat{\eta}^{\langle#1,#2\rangle}_{#3}}
+
+% transformers
+\newcommand\ect[1]{\mathsf{ect}[#1]}
+\newcommand\ert[1]{\mathsf{ert}[#1]}
+% \newcommand\evt[1]{\mathsf{evt}[#1]}
+% \newcommand\e[2][k]{\mathsf{e}_{#1,#2}}
+
+
+% cost expressions
+\newcommand\Qpos{\Q_{\ge 0}}
+\newcommand\CExp{\mathsf{CExp}}
+\newcommand\Base{\mathsf{B}}
+\newcommand\States{\Sigma}
+\newcommand\norm[1]{\langle #1 \rangle}
+\newcommand\uniform[2]{\mathtt{unif}\cpar{#1,#2}}
+% \newcommand\binomial[2]{\mathtt{binomial}\cpar{#1,#2}}
+\newcommand\bernoulli[1]{\mathtt{coin}\cpar{#1}}
+\newcommand\base{n}
+\newcommand\basetwo{m}
+\newcommand\cexp{c}
+\newcommand\cexptwo{d}

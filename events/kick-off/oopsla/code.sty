@@ -1,0 +1,207 @@
+\RequirePackage{listings}
+\RequirePackage{xcolor}
+
+% \newcommand{\cmtstyle}{\itshape\color{black!70!white}}
+% \newcommand{\keystyle}{\color{green!30!black}}
+% \newcommand{\ctrlstyle}{\color{brown!90!black}}
+% \newcommand{\emphstyle}{\rmfamily\emph}
+% \newcommand{\constrstyle}{\color{green!30!black}}
+\newcommand{\cmtstyle}{\itshape\color{black!70!white}}
+\newcommand{\keystyle}{\color{blue}}
+\newcommand{\ctrlstyle}{}
+\newcommand{\emphstyle}{\em}
+\newcommand{\constrstyle}{}
+
+\let\origthelstnumber\thelstnumber
+\makeatletter
+
+\lst@AddToHook{Init}{\def\lsthk@OnNewLine{}}
+\newcommand*\showln{%
+  \lst@AddToHook{OnNewLine}{%
+   \let\thelstnumber\origthelstnumber%
+   \advance\c@lstnumber\@ne\relax}%
+}
+
+\newcommand*\surpressln{%
+  \lst@AddToHook{OnNewLine}{%
+    \let\thelstnumber\relax%
+    \advance\c@lstnumber-\@ne\relax%
+   }%
+ }%
+\makeatother
+
+% allow \lstinline in math
+\usepackage{etoolbox}
+\expandafter\patchcmd\csname \string\lstinline\endcsname{%
+  \leavevmode
+  \bgroup
+}{%
+  \leavevmode
+  \ifmmode\hbox\fi
+  \bgroup
+}{}{%
+  \typeout{Patching of \string\lstinline\space failed!}%
+}
+
+% haskell identifiers, use first character to decide if constructor or symbol
+\makeatletter
+\newcommand*\haskellidstyle{%
+        \expandafter\id@style\the\lst@token\relax
+}
+\def\id@style#1#2\relax{%
+        \ifcat#1\relax\else
+                \ifnum`#1=\uccode`#1%
+                        \constrstyle
+                \fi
+        \fi
+}
+\makeatother
+
+% make literate expandible
+\makeatletter
+\def\addToLiterate#1{\edef\lst@literate{\unexpanded\expandafter{\lst@literate}\unexpanded{#1}}}
+\lst@Key{literate}{}{\addToLiterate{#1}}
+\makeatother
+
+% newlines
+\makeatletter
+\lst@AddToHook{OnEmptyLine}{\vspace{-.7\baselineskip}\addtocounter{lstnumber}{-1}}
+\makeatother
+
+\newcommand{\basicstyle}{\small\linespread{0.9}\ttfamily}
+\lstdefinestyle{common}{
+  basicstyle=\basicstyle,
+  commentstyle=\cmtstyle,
+  keywordstyle=\keystyle,
+  emphstyle=\emphstyle,
+  showspaces=false,
+  showstringspaces=false,
+  flexiblecolumns=false,
+  basewidth={0.5em,0.45em},
+  tabsize=2,
+  captionpos=b,
+  mathescape=true,
+  escapechar=\%,
+  xleftmargin=10pt,
+  xrightmargin=10pt,
+  abovecaptionskip=\smallskipamount,%\bigskipamount,
+  numbers=none,
+}
+
+
+\lstdefinestyle{framed}{
+  frame=tblr,
+}
+
+\lstdefinestyle{numbered}{
+  numbers=left,
+  numbersep=4pt,
+  xleftmargin=8pt,
+  % xrightmargin=8pt,
+  % framexleftmargin=6pt,
+  % framexrightmargin=6pt,
+  numberblanklines=false,
+  numberstyle=\color{gray}\scriptsize\em,
+}
+
+
+\lstdefinestyle{haskell}{%
+  language=Haskell,
+  style=common,
+  identifierstyle=\haskellidstyle,
+  keywords={data,class,type,where,=,case,of,let,in,if,then,else},
+  emphstyle=[2]\haskellidstyle, %\color{blue}
+  literate= {/}{{$/$}}1 {*}{{$*$}}1 {=}{{{\ctrlstyle{$=$}}}}1
+            {>}{{$>$}}1 {<}{{$<$}}1 {\\}{{$\lambda$}}1
+            {>>>}{{$\ggg$}}3
+            {<|>}{{${<}{|}{>}$}}4
+            {<||>}{{${<}{|}{|}{>}$}}4
+            {\\\\}{{\char`\\\char`\\}}1
+            {:}{{{\constrstyle:}}}1
+            {::}{{{$\ctrlstyle\decl$}}}1
+            {->}{{$\ctrlstyle\rightarrow$}}2
+            {<-}{{{\ctrlstyle$\leftarrow$}}}2
+            {>=}{{$\geq$}}2
+            {<=}{{$\leq$}}2
+            {=>}{{$\ctrlstyle\Rightarrow$}}2
+            {<=>}{{$\ctrlstyle\Leftrightarrow$}}2
+            {try}{{{\ctrlstyle{try}}}}3
+            {\ .}{{{\ctrlstyle$\circ$}}}2 {\ .\ }{{{\ctrlstyle$\circ$}}}2
+            {|}{{{{\ctrlstyle{$\mid$}}}}}1
+            % {)}{{{{\ctrlstyle{)}}}}}1
+            % {(}{{{{\ctrlstyle{(}}}}}1
+            {\}}{{{{\ctrlstyle{\}}}}}}1
+            {\{}{{{{\ctrlstyle{\{}}}}}1
+            {<$>}{{{{\ctrlstyle{<\$>}}}}}3
+            {[}{{{\constrstyle{[}}}}1
+            {]}{{{\constrstyle{]}}}}1
+            {`}{{{\ctrlstyle{`}}}}1
+            {Va}{{$\alpha$}}1
+            {Vb}{{$\beta$}}1
+            {Vc}{{$\gamma$}}1
+}
+
+\def\hask{\lstinline[style=haskell]}
+\newcommand*{\module}[1]{{\lstinline[style=common]|#1|}}
+
+\lstdefinestyle{pwhile}{
+  style=common,
+  keywords={if,then,else,while,consume,uniform,abort,assume,assert,var,+, -, *,Uniform,Coin},
+  keywords=[2]{},
+  morecomment=[n][\cmtstyle]{//}{\^^M},
+  keywordstyle=[2]\color{green!60!black},
+  literate= {:=}{{{\keystyle{{$\passign$}}}}}1
+            {>}{{$>$}}1
+            {<}{{$<$}}1
+            {=}{{$=$}}1
+            {>=}{{$\geq$}}1
+            {<=}{{$\leq$}}1
+}
+
+\newcommand*\pwhile[1][]{\lstinline[style=pwhile,emph={#1}]}
+
+\lstdefinestyle{ocaml}{
+  language=[Objective]Caml,
+  style=common,
+  keywords={type,let,in,rec,=,;;,fun,->,match,with,fix,Unif},
+  morecomment=[s][\cmtstyle]{(*}{*)},
+  emphstyle=[2]\color{blue},
+  literate= {/}{{$/$}}1 {*}{{$*$}}1 {=}{{{\ctrlstyle{$=$}}}}1
+            {>}{{$>$}}1 {<}{{$<$}}1 {\\}{{$\constrstyle\lambda$}}1
+            {:}{{{\ctrlstyle:}}}1
+            {::}{{{\constrstyle::}}}2
+            {->}{{$\ctrlstyle\mapsto$}}2 {>=}{{$\geq$}}2 {<-}{{{\ctrlstyle$\leftarrow$}}}2
+            {<=}{{$\leq$}}2 {=>}{{$\ctrlstyle\Rightarrow$}}2
+            {:=}{{$\equiv$}}1
+            {\ .}{{{\ctrlstyle$\circ$}}}2 {\ .\ }{{{\ctrlstyle$\circ$}}}2
+            {|}{{{{\ctrlstyle{$\mid$}}}}}1
+            {)}{{{{\ctrlstyle{)}}}}}1
+            {(}{{{{\ctrlstyle{(}}}}}1
+            {[}{{{\constrstyle{[}}}}1
+            {]}{{{\constrstyle{]}}}}1
+            {Ox}{{$\otimes$}}1
+            {Va}{{$\alpha$}}1
+            {Vb}{{$\beta$}}1
+            {Vc}{{$\gamma$}}1
+            {PRl}{{$\langle$}}1
+            {PRr}{{$\rangle$}}1
+}
+
+\lstdefinestyle{imp}{%
+  style=common,
+  language=C,
+}
+
+\lstdefinestyle{repl}{%
+  style=common,
+  basicstyle=\scriptsize\ttfamily,
+}
+
+\lstdefinestyle{cs}{%
+  style=common,
+  keywords=[1]{>=},
+  emphstyle=[2]\color{blue},
+  basicstyle=\scriptsize\ttfamily,
+  literate= {(}{{{{\ctrlstyle{(}}}}}1
+            {)}{{{{\ctrlstyle{)}}}}}1
+}

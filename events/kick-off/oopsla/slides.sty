@@ -1,0 +1,497 @@
+\RequirePackage{xparse}
+\RequirePackage{xargs}
+\RequirePackage{tikz}
+\RequirePackage{boxedminipage}
+\RequirePackage{changepage}
+%\RequirePackage{biblatex}
+\usetikzlibrary{calc}
+\usetikzlibrary{shapes.callouts}
+
+\definecolor{hlblue}{HTML}{1957c7}
+\definecolor{hlorange}{HTML}{e19e1e}
+\definecolor{hlred}{HTML}{c73219}
+\definecolor{hlgreen}{rgb}{0.098,0.5,0.098}
+
+\newcommand{\withcolor}[2]{\begingroup\color{#1}#2\endgroup\xspace}
+\newcommand\mblue{\withcolor{hlblue}}
+\newcommand\mgreen{\withcolor{hlgreen}}
+\newcommand\mred{\withcolor{hlred}}
+\newcommand\morange{\withcolor{hlorange}}
+
+\newcommand<>{\ablue}{\alt#1{\alert}{\mblue}}
+\newcommand<>{\agreen}{\alt#1{\alert}{\mgreen}}
+\newcommand<>{\ared}{\alt#1{\alert}{\mred}}
+\newcommand<>{\aorange}{\alt#1{\alert}{\morange}}
+
+% \usepackage{calc}
+% \usepackage{tikz}
+% \usepackage{pgf}
+% \usepackage{wasysym}
+% \usepackage{multirow}
+% \usepackage{slashed}
+% \usepackage{ulsy}
+% \usepackage{mathtools}
+%
+% \usepackage{stmaryrd}
+% \usepackage{xargs}
+% \usepackage{proof}
+% \RequirePackage{pifont}
+% \usetikzlibrary{backgrounds}
+% \usetikzlibrary{fit}
+% \usetikzlibrary{matrix}
+% \usetikzlibrary{shapes.symbols}
+
+% \usetikzlibrary{arrows}
+% \usetikzlibrary{trees}
+% \usetikzlibrary{shadows}
+% \usetikzlibrary{automata}
+% \usetikzlibrary{decorations.pathmorphing}
+% \usetikzlibrary{decorations.pathreplacing}
+% \usetikzlibrary{calc}
+% \usetikzlibrary{fadings}
+
+
+% % BIBLIO
+
+% \setbeamertemplate{bibliography item}{\lower4pt\hbox{\scalebox{0.75}{\pgfuseimage{beamericonarticle}}}}
+
+% % \patchcmd{\thebibliography}{\leftmargin\labelwidth}{\leftmargin\labelwidth\addtolength\itemsep{-2mm}}{}{}
+
+% % \setbeamercolor*{bibliography entry title}{fg=black}
+% % \setbeamercolor*{bibliography entry author}{fg=blue}
+% % \setbeamercolor*{bibliography entry location}{fg=blue!75}
+% % \setbeamercolor*{bibliography entry note}{fg=black}
+
+% \newenvironment{thebib}
+%   {\vspace{-1mm}\footnotesize\begin{adjustwidth}{7mm}{0pt}\begin{thebibliography}{}}
+%   {\end{thebibliography}\end{adjustwidth}}
+
+% \newenvironment{footbib}
+% {\begin{floating}(current page.south)[south]\begin{minipage}{\textwidth}\separator\vspace{-1mm}\begin{thebibliography}{}\footnotesize}
+% {\end{thebibliography}\vspace{1mm}\end{minipage}\end{floating}}
+
+% TEXT
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% misc
+% --------------------------------------------------------------------
+\newcommand*{\cl}[1]{\langle{#1}\rangle}
+\newcommand*{\bskip}{\vspace{-\baselineskip}}
+
+\newcommand{\mymatrix}[2]{%
+{\left(\!\!
+  \begin{array}{#1}
+    #2
+  \end{array}
+\!\!\right)}
+}
+
+% numberings
+% --------------------------------------------------------------------
+
+% \newcommand{\cNum}[1]{\text{\raisebox{-0.7pt}{\ding{#1}}}}
+\newcommand*{\encircled}[2][]{\tikz[baseline={([yshift=-.25\baselineskip]current bounding box.center)}]{\node[thin,circle,#1] {\llap{\phantom{X}}#2};}\ }
+\newcommand*{\cOne}{\encircled{1}}
+\newcommand*{\cTwo}{\encircled{2}}
+\newcommand*{\cThree}{\encircled{3}}
+\newcommand*{\cFour}{\encircled{4}}
+\newcommand*{\cFive}{\encircled{5}}
+\newcommand*{\cSix}{\encircled{6}}
+\newcommand*{\cSeven}{\encircled{7}}
+\newcommand*{\cEight}{\encircled{8}}
+\newcommand*{\cNine}{\encircled{9}}
+\newcommand*{\cZero}{\encircled{0}}
+\newcommand*{\caa}{\encircled{a}}
+\newcommand*{\cab}{\encircled{b}}
+\newcommand*{\cac}{\encircled{c}}
+\newcommand*{\cad}{\encircled{d}}
+\newcommand*{\cae}{\encircled{e}}
+\newcommand*{\caf}{\encircled{f}}
+\newcommand*{\cag}{\encircled{g}}
+\newcommand*{\cah}{\encircled{h}}
+\newcommand*{\cai}{\encircled{i}}
+\newcommand*{\cau}{\encircled{u}}
+\newcommand*{\cav}{\encircled{v}}
+\newcommand*{\caw}{\encircled{w}}
+\newcommand*{\cax}{\encircled{x}}
+\newcommand*{\cay}{\encircled{y}}
+\newcommand*{\caz}{\encircled{z}}
+
+
+% colors
+% --------------------------------------------------------------------
+\newcommand<>{\GREEN}[1]{{\color#2{green}#1}}
+\newcommand<>{\ORANGE}[1]{{\color#2{orange}#1}}
+\newcommand<>{\DORANGE}[1]{{\color#2{orange}#1}}
+\newcommand<>{\BLACK}[1]{{\color#2{black}#1}}
+\newcommand<>{\RED}[1]{{\color#2{red}#1}}
+\newcommand<>{\DRED}[1]{{\color#2{amaranth}#1}}
+\newcommand<>{\DBLUE}[1]{{\color#2{airforceblue}#1}}
+\newcommand<>{\DGREEN}[1]{{\color#2{ao}#1}}
+\newcommand<>{\VIOLET}[1]{{\color#2{red!50!blue}#1}}
+%\newcommand<>{\BLUE}[1]{{\color#2{cl@darkblue}#1}}
+\newcommand<>{\MAGENTA}[1]{{\color#2{magenta}#1}}
+\newcommand<>{\GRAY}[1]{{\color#2{gray}#1}}
+\newcommand<>{\DGRAY}[1]{{\color#2{gray!40!black}#1}}
+\newcommand<>{\YELLOW}[1]{{\color#2{yellow}#1}}
+\newcommand<>{\WHITE}[1]{{\color#2{white}#1}}
+% structure
+% --------------------------------------------------------------------
+\newcommand<>{\scmt}[1]{\onslide#2{\emph{\phantom{.}\hfill#1}}}
+% \newcommand{\shortcite}[1]{{\usebeamercolor[fg]{palette ternary}{\emph{[#1]}}}}
+\newcommand{\shortcite}[1]{\emph{\color{darkgray}{[#1]}}}
+\newcommand{\shortcitet}[2]{\emph{\color{darkgray}{#1 [#2]}}}
+% \newcommand{\shortcite}[1]{{\usebeamercolor[fg]{palette primary}{[#1]}}}
+% \newcommand{\shortcite}[2]{{\color{palette primary.fg}{\emph{\@ifnotempty{#1}{[}\@ifnotempty{#1}{#1,}{#2}\@ifnotempty{#1}{]}}}}}
+\newcommand{\ueb}[1]{{\usebeamercolor[fg]{palette primary}{#1}}}
+\newcommand{\clr}[1]{{\usebeamercolor[fg]{palette primary}{#1}}}
+\newcommand<>{\alrt}[1]{\alert#2{#1}}
+
+%% frames
+\newlength{\@boxlen}
+\renewcommand\boxed[1]{%
+  \settowidth{\@boxlen}{#1}%
+  \addtolength{\@boxlen}{2mm}%
+  \setbeamercolor{bx}{fg=structure.bg, bg=structure.fg}%
+  \begin{beamercolorbox}[center,wd=\@boxlen,rounded=true]%
+    {bx}%
+  #1%
+  \end{beamercolorbox}%
+}
+
+% \newenvironment{sectionframe}[1]%
+% {\bgroup\setbeamertemplate{background}{}\begin{frame}[t]%
+%  \vspace{3cm}%
+%  \boxed{%
+%    \parbox{0.98\textwidth}{{~}\\\huge{#1}\\[-4mm]}%
+%  }{~}\\[-3mm]%
+%  \color{structure.fg}\large\bgroup}
+% {\egroup\end{frame}\egroup\addtocounter{framenumber}{-1}}
+
+
+%% outline
+\newcommand{\outlueb}[1]{\boxed{\parbox{0.98\textwidth}{{~}\\\Large{#1}\\[-3mm]}}}
+
+\newcommand<>{\outlineitem}[1]{\alt#2{\outlueb{#1}\vspace{3mm}}{{\color{structure.fg}$\vartriangleright$~}{#1{~}\\[3mm]}}}
+
+\newenvironment<>{outline}{\begin{frame}<0>[t,label=outlineframe]\vfill}{\vfill\end{frame}}
+
+\newcommand<>{\outlineframe}{\againframe#1{outlineframe}}
+
+
+\newenvironmentx{remarkbox}[2][1=0mm, 2=h]
+{%\begin{center}%
+    \begin{tikzpicture}[overlay, remember picture]
+     \node[rounded corners, draw=structure.fg,fill=structure.fg!10, minimum height=#1] (txt) at (0,0)%
+      \bgroup%
+        \begin{minipage}[#2]{0.98\linewidth}
+          \vfill\bgroup%
+}
+{%
+          \egroup\vfill%
+        \end{minipage}\egroup;%
+    \end{tikzpicture}%
+  %\end{center}
+}
+
+
+% tikzery
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%\tikzstyle{every picture}+=[remember picture]
+\newcommand{\tikzanchor}[2][]{\tikz[overlay,remember picture]{\coordinate[#1] (#2) at (0,0) {};}}
+
+\tikzset{
+    invisible/.style={opacity=0,text opacity=0},
+    visible on/.style={alt=#1{}{invisible}},
+    alt/.code args={<#1>#2#3}{%
+      \alt<#1>{\pgfkeysalso{#2}}{\pgfkeysalso{#3}} % \pgfkeysalso doesn't change the path
+    },
+}
+
+% callouts
+% ---------------------------------------------------------------------
+
+
+\tikzstyle{greenbox}=[thick,draw=green!50!black,fill=green!5!white,text=green!50!black]
+\tikzstyle{bluebox}=[thick,draw=blue!50!black,fill=blue!5!white,text=blue!50!black]
+\tikzstyle{redbox}=[thick,draw=red!50!black,fill=red!10!white,text=red!50!black]
+\tikzstyle{alertbox}=[thick,draw=alerted text.fg,fill=alerted text.fg!7,text=alerted text.fg]
+\tikzstyle{orangebox}=[thick,draw=orange,fill=orange!10!white,text=orange]
+
+
+%usage : \callout<1>{anchronode}{angle}{len}{the text}
+\NewDocumentCommand{\callout}{r<> O{} m m m m}{%
+\only<#1>{\tikz[overlay, remember picture]{%
+    \usebeamercolor{structure}
+    \node[text=fg,draw=fg,fill=fg!7,align=center, inner sep=1mm,draw,rectangle callout,anchor=pointer,callout relative pointer={(#4:#5)},#2]%
+    at (#3) {\strut #6};}}%
+}
+
+
+% reverse highlight
+% ----------------------------------------------------------------------
+\tikzstyle{reverseclip}=[insert path={(current page.north east) --
+  (current page.south east) --
+  (current page.south west) --
+  (current page.north west) --
+  (current page.north east)}
+]
+
+\tikzstyle{hlbg}=[fill=gray,opacity=0.5]
+\NewDocumentEnvironment{highlighting}{r<> O{hlbg}}
+{\begin{tikzpicture}[overlay, remember picture]}
+{{\only<#1>{\fill[#2,reverseclip];}}\end{tikzpicture}}
+
+\newcommand{\highlight}[2]{%
+  \begin{pgfinterruptboundingbox}
+    \coordinate (l) at ($(#1)+(-1mm,\baselineskip)$);
+    \coordinate (r) at ($(#2)+(1mm,-2mm)$);
+    \path [rounded corners,clip] (l) rectangle (r) [rounded corners=0mm,reverseclip];
+  \end{pgfinterruptboundingbox}
+}
+
+\newcommand<>{\boarder}[2][draw=structure.fg]{
+  \begin{tikzpicture}
+    \node#3[fill opacity=0.2,#1,fit={#2}] {};
+  \end{tikzpicture}
+}
+
+\newsavebox\floatingbox
+\NewDocumentEnvironment{floating}{D(){0,0}O{center}}
+{\begin{lrbox}{\floatingbox}\bgroup}
+{\egroup\end{lrbox}%
+\begin{tikzpicture}[overlay, remember picture]
+\node[align=left,inner sep=0,anchor=#2] at (#1){\usebox\floatingbox};
+\end{tikzpicture}}
+
+\newcommand<>{\demo}[1][demo]{
+\begin{highlighting}#2
+\end{highlighting}
+\only#2{\tikz[overlay, remember picture, inner sep = 3mm, minimum width=3cm]{%
+    \usebeamercolor{block title example}%
+    \node[draw=fg,thick,fill=bg,rounded corners] at (current page.center) {\color{fg}{\textbf{#1}}};}}}
+
+%tikz properties with overlay specification
+
+\tikzset{alt/.code args={<#1>#2#3}{\alt<#1>{\pgfkeysalso{#2}}{\pgfkeysalso{#3}}}}
+\tikzset{only/.code args={#1<#2>}{\only<#2>{\pgfkeysalso{#1}}}}
+
+\tikzset{visible on/.style args={<#1>}{alt={<#1>{opacity=0}{opacity=1}}}}
+\tikzset{opaque on/.style args={<#1>}{alt={<#1>{opacity=0.2}{}}}}
+\tikzset{alert text on/.code args={<#1>}{\color<#1>{alerted text.fg}}}
+
+% proofs
+% --------------------------------------------------------------------
+\newcommand<>{\inferb}[3][]{
+  \rlap{\temporal#4{\deduce}{\infer}{\infer}[#1]{\strut#2}{\onslide#4{\strut#3}}}%
+  \phantom{\infer[#1]{\strut#2}{\strut#3}}}
+
+\newcommand<>{\malt}[2]{%
+  \text{\rlap{\alt#3{\ensuremath{#1}}{\ensuremath{#2}}}%
+  \phantom{\ensuremath{#1}}}}
+
+\newcommand<>{\maltr}[2]{%
+  \phantom{\ensuremath{#1}}\text{\makebox[0pt][r]{\alt#3{\ensuremath{#1}}{\ensuremath{#2}}}}}
+
+% images
+% --------------------------------------------------------------------
+
+\newcommand{\failed}{
+  \resizebox{25mm}{!}{{\includegraphics{images/failed.png}}}}
+\newcommand{\approved}{
+  \resizebox{30mm}{!}{{\includegraphics{images/approved.png}}}}
+\newcommand{\butters}[1][6cm]{
+  \resizebox{#1}{!}{{\includegraphics{images/butters.png}}}}
+
+\newcommand{\garfieldMagician}[1][6cm]{
+  \resizebox{#1}{!}{{\includegraphics{images/garfield-magician.jpg}}}}
+
+\newcommand{\garfieldFlashlight}[1][6cm]{
+  \resizebox{#1}{!}{{\includegraphics{images/garfield-flashlight.png}}}}
+
+\newcommand{\pinkyBrain}[1][6cm]{
+  \resizebox{#1}{!}{{\includegraphics{images/pinky_brain.jpg}}}}
+
+\newcommand{\yoda}[1][6cm]{
+  \resizebox{#1}{!}{{\includegraphics{images/yoda.jpg}}}}
+
+\newcommand{\luke}[1][6cm]{
+  \resizebox{#1}{!}{{\includegraphics{images/luke.jpg}}}}
+
+\newcommand{\lgpl}[1][6cm]{
+  \resizebox{#1}{!}{{\includegraphics{images/lgpl.png}}}}
+
+\newcommand{\opensource}[1][6cm]{
+  \resizebox{#1}{!}{{\includegraphics{images/opensource.png}}}}
+
+\newcommand{\goedelmedal}[1][6cm]{
+  \resizebox{#1}{!}{{\includegraphics{images/goedelmedal.png}}}}
+
+\newcommand{\uibklogo}[1][6cm]{
+  \resizebox{#1}{!}{{\includegraphics{images/uibk.jpg}}}}
+
+\newcommand{\cllogo}[1][6cm]{
+  \resizebox{#1}{!}{{\includegraphics{images/cllogo.png}}}}
+
+\newcommand{\isabellelogo}[1][6cm]{
+  \resizebox{#1}{!}{{\includegraphics{images/isabelle_logo.png}}}}
+
+\newcommand{\cetalogo}[1][6cm]{
+  \resizebox{#1}{!}{{\includegraphics{images/ceta.png}}}}
+
+
+% misc
+% --------------------------------------------------------------------
+
+\newenvironment{transparencyturnedof}[0]{\setbeamercovered{invisible}}{\setbeamercovered{transparent}}
+\newenvironment{transparencyturnedon}[0]{\setbeamercovered{transparent}}{\setbeamercovered{invisible}}
+
+\newenvironment{framed}[0]{\begin{boxedminipage}{\linewidth}\vspace{-2mm}}{\vspace{-2mm}\end{boxedminipage}\vspace{-1mm}}
+
+\renewcommand*{\nth}[1]{#1th}
+\renewcommand*{\nst}[1]{#1st}
+\renewcommand*{\nrd}[1]{#1rd}
+\renewcommand*{\nnd}[1]{#1nd}
+
+
+% rewriting
+% --------------------------------------------------------------------
+
+\let\varorig\var
+\renewcommand<>{\var}[1]{{\only#2{\usebeamercolor[fg]{palette secondary}}{\varorig{#1}}}}
+
+\let\funorig\fun
+\renewcommand{\fun}[1]{\mblue{\funorig{#1}}}
+
+\let\conorig\con
+\renewcommand{\con}[1]{\mblue{\conorig{#1}}}
+
+% % biblatex
+% % ----------------------------------------------------------------------
+
+% \DeclareCiteCommand{\citeauthorfirstlast}
+%   {\boolfalse{citetracker}%
+%    \boolfalse{pagetracker}%
+%    \DeclareNameAlias{labelname}{first-last}%
+%    \usebibmacro{prenote}}
+%   {\ifciteindex
+%      {\indexnames{labelname}}
+%      {}%
+%    \printnames{labelname}}
+%   {\multicitedelim}
+%   {\usebibmacro{postnote}}
+
+% \DeclareCiteCommand{\citeintitle}% Based on \citetitle from biblatex.def
+%   {\boolfalse{citetracker}%
+%    \boolfalse{pagetracker}%
+%    \usebibmacro{prenote}}
+%   {\ifciteindex
+%      {\indexfield{indextitle}}
+%      {}%
+%    \iffieldundef{journaltitle}
+%      {\iffieldundef{booktitle}
+%         {\iffieldundef{maintitle}
+%           {\printfield[citetitle]{labeltitle}}% Behave like \citetitle if no "main" title
+%           {\printtext[maintitle]{\printfield[titlecase]{maintitle}}}}
+%         {In \printtext[booktitle]{\printfield[titlecase]{booktitle}}}}
+%      {\printtext[journaltitle]{\printfield[titlecase]{journaltitle}\iffieldundef{volume}{}{, Vol.~\printfield[titlecase]{volume}}}}}
+%   {\multicitedelim}
+%   {\usebibmacro{postnote}}
+
+% \DeclareCiteCommand{\citepages}
+%   {\boolfalse{citetracker}%
+%    \boolfalse{pagetracker}%
+%    \usebibmacro{prenote}}
+%  {\iffieldundef{pages}{}{, \printfield{pages}}}
+%  {\multicitedelim}
+%  {\usebibmacro{postnote}}
+
+% \setbeamertemplate{bibliography entry title}{}
+% \setbeamertemplate{bibliography entry author}{}
+% \setbeamertemplate{bibliography entry note}{}
+
+% \newcommand{\biblioitem}[1]{\nocite{#1}%
+% \bibitem[#1]{#1}\citeauthorfirstlast{#1}. \newblock \emph{\citetitle{#1}}. \newblock \citeintitle{#1}\citepages{#1}, \citeyear{#1}.}%\citefield{#1}{title}
+
+
+\NewDocumentCommand\LeftBrace{%
+    O{}% #1 = draw options
+    O{0pt}% #2 = shift to be applied (optional, for use with nested braces)
+    m% #3 = top \tikzmark name
+    m% #4 = bottom \tikzmark name
+    m% #5 = node text
+}{%
+    \begin{tikzpicture}[overlay,remember picture,baseline]
+        \coordinate (Top Start of Bracket)    at ([shift={(#2-12pt,3pt)}]#3.north east);
+        \coordinate (Bottom Start of Bracket) at ([shift={(#2-12pt,2pt)}]#4.south east);
+
+      \draw[decorate,decoration={brace,raise=6pt, amplitude=1.0ex, mirror}, ultra thick, #1]
+        (Top Start of Bracket) --
+             node[xshift=-10pt, align=left, anchor=east, #1] {#5}
+        (Bottom Start of Bracket);
+    \end{tikzpicture}
+}
+\NewDocumentCommand\RightBrace{%
+    O{}% #1 = draw options
+    O{0pt}% #2 = shift to be applied (optional, for use with nested braces)
+    m% #3 = top \tikzmark name
+    m% #4 = bottom \tikzmark name
+    m% #5 = right most \tikzmark name
+    m% #6 = node text
+}{%
+    \begin{tikzpicture}[overlay,remember picture,baseline]
+        \coordinate (Top Start of Bracket)    at ($(#5)!([yshift=3pt]#3.north)!(#5)$);
+        \coordinate (Bottom Start of Bracket) at ($(#5)!([yshift=3pt]#4.south)!(#5)$);
+
+        \draw[decorate,decoration={brace,raise=6pt, amplitude=1.0ex, mirror}, ultra thick, #1]
+            ([xshift=#2]Bottom Start of Bracket) --
+                node[xshift=10pt, align=left, anchor=west, #1] {#6}
+            ([xshift=#2]Top Start of Bracket);
+    \end{tikzpicture}
+}
+
+
+\newcommand*{\BracektStubSize}{0.5em}%
+\NewDocumentCommand\LeftBracket{%
+    O{}% #1 = draw options
+    O{0pt}% #2 = shift to be applied (optional, for use with nested braces)
+    m% #3 = top \tikzmark name
+    m% #4 = bottom \tikzmark name
+    m% #5 = node text
+}{%
+    \begin{tikzpicture}[overlay,remember picture,baseline]
+        \coordinate (Top Start of Bracket) at ([shift={(#2-15pt,5pt)}]#3.north east);
+        \coordinate (Bottom Start of Bracket) at ([shift={(#2-15pt,2pt)}]#4.south east);
+        \draw[ultra thick, #1]
+            (Top Start of Bracket) --++(-\BracektStubSize,0)
+                |-(Bottom Start of Bracket) ;
+
+        \node[xshift=-5pt, align=left, anchor=east, #1]
+            at ($(Bottom Start of Bracket)!0.5!(Top Start of Bracket)$) {#5};
+    \end{tikzpicture}
+}
+\NewDocumentCommand\RightBracket{%
+    O{}% #1 = draw options
+    O{0pt}% #2 = shift to be applied (optional, for use with nested braces)
+    m% #3 = top \tikzmark name
+    m% #4 = bottom \tikzmark name
+    m% #5 = right most \tikzmark name
+    m% #6 = node text
+}{%
+    \begin{tikzpicture}[overlay,remember picture,baseline]
+        \coordinate (Top Start of Bracket)    at ($(#5)!([yshift=3pt]#3.north)!(#5)$);
+        \coordinate (Bottom Start of Bracket) at ($(#5)!([yshift=3pt]#4.south)!(#5)$);
+
+        \draw[ultra thick, #1]
+            ([xshift=#2]Bottom Start of Bracket) -- ++(\BracektStubSize,0)
+            |- ([xshift=#2]Top Start of Bracket) ;
+
+        \node[xshift=10pt, align=left, anchor=west, #1]
+            at ($(Bottom Start of Bracket)!0.5!(Top Start of Bracket)$)
+            {#6};
+    \end{tikzpicture}
+}
+
+% tools
+\newcommand*\ecoimp{\texttt{eco-imp}\xspace}
