@@ -1,0 +1,67 @@
+\documentclass[paper=a4,
+fontsize=11pt,
+fromalign=right,
+fromrule=true,
+fromphone=false,
+fromemail=true,
+fromlogo=true,
+backaddress=false,
+parskip=true,
+subject=untitled,
+addrfield=true,
+]{scrlttr2}
+
+\usepackage[utf8x]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[ngerman]{babel}
+\usepackage[babel,german=quotes]{csquotes}
+\usepackage{amsmath}
+\usepackage{textcomp}
+\usepackage{url}
+\usepackage{graphicx}
+\pagestyle{headings}
+
+\setkomavar{fromname}{\emph{Univ.-Prof.~Dr.~Georg Moser}}
+\setkomavar{fromaddress}{%
+  % Universität Innsbruck\\
+  Theoretische Informatik\\
+   Institut für Informatik%
+%   Technikerstraße 21a\\
+%   6020 Innsbruck
+}
+\setkomavar{fromlogo}{\includegraphics[height=2.5cm]{dcs.jpg}}
+\setkomavar{fromphone}{+43 (512) 507 53213}
+\setkomavar{fromemail}{\url{georg.moser@uibk.ac.at}}
+\setkomavar{fromurl}{\url{https://tcs-informatik.uibk.ac.at/}}
+\setkomavar{signature}{\includegraphics[height=2cm]{unterschrift.png}\\Georg Moser}
+
+\selectlanguage{ngerman}
+
+\newcommand*{\tpkt}{\rlap{$\;$.}}
+\newcommand*{\tkom}{\rlap{$\;$,}}
+\newcommand*{\tct}{\textsf{T\!\raisebox{-0.5mm}{C}\!T}}
+
+\pagestyle{empty}
+\begin{document}
+\begin{letter}{%
+    Österreichischer Wissenschaftsfond (FWF)\\
+    \vspace*{0.25cm}
+    Georg-Coch-Platz 2\\
+    1010 Wien
+}
+
+\LoadLetterOption{DIN}
+
+\setkomavar{subject}{Ansuchen um kostenneutrale Verlängerung}
+
+\opening{Sehr geehrte Damen und Herren!}
+
+ich möchte hiermit um kostenneutrale Verlängerung des Projektes \enquote{Automatische Amort. Ressourcenanalyse von Datenstrukturen}
+Förderungsnummer \textbf{P 36623-N} um 3 Monate bis zum 30. 6. 2027 ansuchen. 
+
+\closing{Mit besten Grüßen}
+
+\smallskip
+
+\end{letter}
+\end{document}
